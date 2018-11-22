@@ -1,0 +1,15 @@
+<h1>Entreprise : Détail</h1>
+{% if entreprise.id == NULL %}
+    <h4>Vous êtes en train de créer une nouvelle entreprise</h4>
+    <p>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_liste') }}">Liste des entreprises</a>
+        <button class="btn btn-sm btn-primary">Créer l'entreprise</button>
+    </p>
+    {% else %}
+    <h4>Vous êtes en train de modifier l'entreprise N° {{ entreprise.id }}</h4>
+    <p>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_liste') }}">Liste des entreprises</a>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_new') }}">Nouvelle entreprise</a>
+        <button class="btn btn-sm btn-primary">Modifier l'entreprise</button>
+    </p>
+{% endif %}

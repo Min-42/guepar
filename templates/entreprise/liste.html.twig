@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guepar > Entreprises{% endblock %}
+
+{% block body %}
+    <h1>Entreprise : Liste</h1>
+
+    <p>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_new') }}">Nouvelle entreprise</a>
+    </p>
+
+    {% for entreprise in entreprises %}
+        {% if loop.first %}
+            <table border='1'>
+                <tr>
+                    <th>Action</th>
+                    <th>Code Siren</th>
+                    <th>Nom</th>
+                    <th>Documents</th>
+                    <th>Contacts</th>
+                    <th>CCN</th>
+                    <th>Effectifs</th>
+                    <th>Nb adhérents</th>
+                    <th>Notes</th>
+                    <th>Création</th>
+                    <th>Modification</th>
+                    <th>Suppression</th>
+                </tr>
+        {% endif %}
+        <tr>
+            <td>
+                <a href="{{ path('entreprise_detail',{'id': entreprise.id}) }}">Editer</a>
+                &nbsp;<a href="">Supprimer</a>
+            </td>
+            <td>{{ entreprise.codeSiren }}</td>
+            <td>{{ entreprise.nom}}</td>
+            <td>
+                {% for document in entreprise.documents %}
+                {{ document.fileOriginalName() }} : {{ document.fileOriginalName() }}
+                {% endfor %}
+            </td>
+            <td>{{ entreprise.contacts }}</td>
+            <td>{{ entreprise.conventionCollective }}</td>
+            <td>{{ entreprise.trancheEffectif }}</td>
+            <td>{{ entreprise.nbAdherents }}</td>
+            <td>{{ entreprise.notes }}</td>
+            <td>le {{ entreprise.createdAt | date('d/m/Y') }} à {{ entreprise.createdAt | date('H:i') }} par {{ entreprise.createdBy }}</td>
+            {% if entreprise.modifiedAt is null %}
+                <td>&nbsp;</td>
+            {% else %}
+                <td>le {{ entreprise.modifiedAt | date('d/m/Y') }} à {{ entreprise.modifiedAt | date('H:i') }} par {{ entreprise.modifiedBy }}</td>
+            {% endif %}
+            {% if entreprise.deletedAt is null %}
+                <td>&nbsp;</td>
+            {% else %}
+                <td>le {{ entreprise.deletedAt | date('d/m/Y') }} à {{ entreprise.deletedAt | date('H:i') }} par {{ entreprise.deletedBy }}</td>
+            {% endif %}
+        </tr>
+        {% if loop.last %}
+            </table>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guepar > Entreprises{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {{ form_start(formDetail) }}
+
+        {% include 'entreprise/navigation.html.twig' %}
+
+        <div class="row">
+
+            {# CodeSiren #}
+            <div class="col-sm-12">
+                <div id="divCodeSiren" class="form-group row">
+                    {{ form_row(formDetail.codeSiren) }}
+                </div>
+            </div>
+
+            {# Nom #}
+            <div class="col-sm-12">
+                <div id="divNom" class="form-group row">
+                    {{ form_row(formDetail.nom) }}
+                </div>
+            </div>
+
+            {# Contacts #}
+            <div class="col-sm-12">
+                <div id="divContacts" class="form-group row">
+                    {{ form_row(formDetail.contacts) }}
+                </div>
+            </div>
+
+            {# ConventionCollective #}
+            <div class="col-sm-12">
+                <div id="divConventionCollective" class="form-group row">
+                    {{ form_row(formDetail.conventionCollective) }}
+                </div>
+            </div>
+
+            {# trancheEffectifs #}
+            <div class="col-sm-12">
+                <div id="divTrancheEffectif" class="form-group row">
+                    {{ form_row(formDetail.trancheEffectifs) }}
+                </div>
+            </div>
+
+            {# NbAdherents #}
+            <div class="col-sm-12">
+                <div id="divNbAdherents" class="form-group row">
+                    {{ form_row(formDetail.nbAdherents) }}
+                </div>
+            </div>
+
+            {# Notes #}
+            <div class="col-sm-12">
+                <div id="divNotes" class="form-group row">
+                    {{ form_row(formDetail.notes) }}
+                </div>
+            </div>
+            
+            {{ form_end(formDetail) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="/javascript/gepar-documents.js"></script>
+    <script>
+        var nomEcran = "entreprise";
+    </script>
+    <script type="text/javascript" src="/javascript/gepar-contacts.js"></script>
+{% endblock %}
