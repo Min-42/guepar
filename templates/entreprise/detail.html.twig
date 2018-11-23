@@ -3,13 +3,13 @@
 {% block title %}Guepar > Entreprises{% endblock %}
 
 {% block body %}
+    <h1>Entreprise : Détail</h1>
     <div class="container-fluid">
         {{ form_start(formDetail) }}
 
         {% include 'entreprise/navigation.html.twig' %}
 
         <div class="row">
-
             {# CodeSiren #}
             <div class="col-sm-12">
                 <div id="divCodeSiren" class="form-group row">
@@ -58,9 +58,11 @@
                     {{ form_row(formDetail.notes) }}
                 </div>
             </div>
-            
-            {{ form_end(formDetail) }}
         </div>
+            
+        {% include 'entreprise/navigation.html.twig' %}
+
+        {{ form_end(formDetail) }}
     </div>
 {% endblock %}
 

@@ -36,12 +36,12 @@
             <td>{{ entreprise.nom}}</td>
             <td>
                 {% for document in entreprise.documents %}
-                {{ document.fileOriginalName() }} : {{ document.fileOriginalName() }}
+                    {{ document.fileOriginalName() }} : {{ document.fileOriginalName() }}
                 {% endfor %}
             </td>
             <td>{{ entreprise.contacts }}</td>
             <td>{{ entreprise.conventionCollective }}</td>
-            <td>{{ entreprise.trancheEffectif }}</td>
+            <td>{{ entreprise.trancheEffectifs }}</td>
             <td>{{ entreprise.nbAdherents }}</td>
             <td>{{ entreprise.notes }}</td>
             <td>le {{ entreprise.createdAt | date('d/m/Y') }} à {{ entreprise.createdAt | date('H:i') }} par {{ entreprise.createdBy }}</td>

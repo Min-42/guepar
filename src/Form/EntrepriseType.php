@@ -26,27 +26,37 @@ class EntrepriseType extends AbstractType
                     'placeholder' => 'Nom de l\'entreprise',
                 ]])
             ->add('contacts', TextareaType::class, [
-                'label' => 'Contacts', 
+                'label' => 'Contacts',
+                'empty_data' => '',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Contacts dans l\'entreprise',
                 ]])
             ->add('conventionCollective', TextType::class, [
                 'label' => 'Convention collective', 
+                'empty_data' => '',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'ID de la Convention Collective',
                 ]])
             ->add('trancheEffectifs', TextType::class, [
                 'label' => 'Tranche d\'effectifs', 
+                'empty_data' => '',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Tranche d\'effectifs de l\'entreprise',
                 ]])
             ->add('nbAdherents', IntegerType::class, [
                 'label' => 'Nombre d\'adhérents', 
+                'empty_data' => -1,
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Nombre d\'adhérents dans l\'entreprise',
                 ]])
             ->add('notes', TextareaType::class, [
                 'label' => 'Notes', 
+                'empty_data' => '',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Notes concernant l\'entreprise',
                 ]])
