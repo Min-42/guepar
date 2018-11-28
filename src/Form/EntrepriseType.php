@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class EntrepriseType extends AbstractType
 {
@@ -25,13 +26,12 @@ class EntrepriseType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Nom de l\'entreprise',
                 ]])
-            ->add('contacts', TextareaType::class, [
-                'label' => 'Contacts',
-                'empty_data' => '',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Contacts dans l\'entreprise',
-                ]])
+            ->add('contacts', CollectionType::class, [
+                'label' => false, 
+                'entry_type' => ContactType::class,
+                'entry_options' => [
+                    'label' => false,
+            ]])
             ->add('conventionCollective', TextType::class, [
                 'label' => 'Convention collective', 
                 'empty_data' => '',

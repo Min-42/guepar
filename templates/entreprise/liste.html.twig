@@ -36,24 +36,28 @@
             <td>{{ entreprise.nom}}</td>
             <td>
                 {% for document in entreprise.documents %}
-                    {{ document.fileOriginalName() }} : {{ document.fileOriginalName() }}
+                    {{ document.fileOriginalName }} : {{ document.fileOriginalName }}
                 {% endfor %}
             </td>
-            <td>{{ entreprise.contacts }}</td>
+            <td>
+                {% for contact in entreprise.contacts %}
+                    {{ contact.civilite }} {{ contact.prenom }} {{ contact.nom }}
+                {% endfor %}
+            </td>
             <td>{{ entreprise.conventionCollective }}</td>
             <td>{{ entreprise.trancheEffectifs }}</td>
             <td>{{ entreprise.nbAdherents }}</td>
             <td>{{ entreprise.notes }}</td>
-            <td>le {{ entreprise.createdAt | date('d/m/Y') }} à {{ entreprise.createdAt | date('H:i') }} par {{ entreprise.createdBy }}</td>
+            <td>le {{ entreprise.createdAt | date('d/m/Y') }} à {{ entreprise.createdAt | date('H:i') }}<br>par {{ entreprise.createdBy }}</td>
             {% if entreprise.modifiedAt is null %}
                 <td>&nbsp;</td>
             {% else %}
-                <td>le {{ entreprise.modifiedAt | date('d/m/Y') }} à {{ entreprise.modifiedAt | date('H:i') }} par {{ entreprise.modifiedBy }}</td>
+                <td>le {{ entreprise.modifiedAt | date('d/m/Y') }} à {{ entreprise.modifiedAt | date('H:i') }}<br>par {{ entreprise.modifiedBy }}</td>
             {% endif %}
             {% if entreprise.deletedAt is null %}
                 <td>&nbsp;</td>
             {% else %}
-                <td>le {{ entreprise.deletedAt | date('d/m/Y') }} à {{ entreprise.deletedAt | date('H:i') }} par {{ entreprise.deletedBy }}</td>
+                <td>le {{ entreprise.deletedAt | date('d/m/Y') }} à {{ entreprise.deletedAt | date('H:i') }}<br>par {{ entreprise.deletedBy }}</td>
             {% endif %}
         </tr>
         {% if loop.last %}

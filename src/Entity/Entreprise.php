@@ -34,11 +34,6 @@ class Entreprise
     private $documents;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $contacts;
-
-    /**
      * @ORM\Column(type="string", length=4)
      */
     private $conventionCollective;
@@ -88,34 +83,40 @@ class Entreprise
      */
     private $deletedBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="entreprise")
+     */
+    private $contacts;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getCodeSiren(): ?string
+    public function getCodeSiren()
     {
         return $this->codeSiren;
     }
 
-    public function setCodeSiren(string $codeSiren): self
+    public function setCodeSiren($codeSiren)
     {
         $this->codeSiren = $codeSiren;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getNom()
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom($nom)
     {
         $this->nom = $nom;
 
@@ -125,12 +126,12 @@ class Entreprise
     /**
      * @return Collection|Document[]
      */
-    public function getDocuments(): Collection
+    public function getDocuments()
     {
         return $this->documents;
     }
 
-    public function addDocument(Document $document): self
+    public function addDocument(Document $document)
     {
         if (!$this->documents->contains($document)) {
             $this->documents[] = $document;
@@ -140,7 +141,7 @@ class Entreprise
         return $this;
     }
 
-    public function removeDocument(Document $document): self
+    public function removeDocument(Document $document)
     {
         if ($this->documents->contains($document)) {
             $this->documents->removeElement($document);
@@ -153,134 +154,153 @@ class Entreprise
         return $this;
     }
 
-    public function getContacts(): ?string
-    {
-        return $this->contacts;
-    }
-
-    public function setContacts(string $contacts): self
-    {
-        $this->contacts = $contacts;
-
-        return $this;
-    }
-
-    public function getConventionCollective(): ?string
+    public function getConventionCollective()
     {
         return $this->conventionCollective;
     }
 
-    public function setConventionCollective(string $conventionCollective): self
+    public function setConventionCollective($conventionCollective)
     {
         $this->conventionCollective = $conventionCollective;
 
         return $this;
     }
 
-    public function getTrancheEffectifs(): ?string
+    public function getTrancheEffectifs()
     {
         return $this->trancheEffectifs;
     }
 
-    public function setTrancheEffectifs(string $trancheEffectifs): self
+    public function setTrancheEffectifs($trancheEffectifs)
     {
         $this->trancheEffectifs = $trancheEffectifs;
 
         return $this;
     }
 
-    public function getNbAdherents(): ?int
+    public function getNbAdherents()
     {
         return $this->nbAdherents;
     }
 
-    public function setNbAdherents(int $nbAdherents): self
+    public function setNbAdherents($nbAdherents)
     {
         $this->nbAdherents = $nbAdherents;
 
         return $this;
     }
 
-    public function getNotes(): ?string
+    public function getNotes()
     {
         return $this->notes;
     }
 
-    public function setNotes(string $notes): self
+    public function setNotes($notes)
     {
         $this->notes = $notes;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt)
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedBy(): ?string
+    public function getCreatedBy()
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(string $createdBy): self
+    public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
 
         return $this;
     }
 
-    public function getModifiedAt(): ?\DateTimeInterface
+    public function getModifiedAt()
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(\DateTimeInterface $modifiedAt): self
+    public function setModifiedAt(\DateTimeInterface $modifiedAt)
     {
         $this->modifiedAt = $modifiedAt;
 
         return $this;
     }
 
-    public function getModifiedBy(): ?string
+    public function getModifiedBy()
     {
         return $this->modifiedBy;
     }
 
-    public function setModifiedBy(string $modifiedBy): self
+    public function setModifiedBy($modifiedBy)
     {
         $this->modifiedBy = $modifiedBy;
 
         return $this;
     }
 
-    public function getDeletedAt(): ?\DateTimeInterface
+    public function getDeletedAt()
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(\DateTimeInterface $deletedAt): self
+    public function setDeletedAt(\DateTimeInterface $deletedAt)
     {
         $this->deletedAt = $deletedAt;
 
         return $this;
     }
 
-    public function getDeletedBy(): ?string
+    public function getDeletedBy()
     {
         return $this->deletedBy;
     }
 
-    public function setDeletedBy(string $deletedBy): self
+    public function setDeletedBy(string $deletedBy)
     {
         $this->deletedBy = $deletedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contact[]
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            // set the owning side to null (unless already changed)
+            if ($contact->getEntreprise() === $this) {
+                $contact->setEntreprise(null);
+            }
+        }
 
         return $this;
     }
