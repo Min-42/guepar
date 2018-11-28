@@ -3,97 +3,79 @@
 {% block title %}Guepar > Entreprises{% endblock %}
 
 {% block body %}
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-        1 of 2
-        </div>
-        <div class="col">
-        2 of 2
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-        1 of 3
-        </div>
-        <div class="col">
-        2 of 3
-        </div>
-        <div class="col">
-        3 of 3
-        </div>
-    </div>
-</div>
-
     <h1>Entreprise : Détail</h1>
+
     {{ form_start(formDetail) }}
+
     <div class="container-fluid">
         {% include 'entreprise/navigation.html.twig' %}
 
-        <div class="row">
-            {# CodeSiren #}
-            <div id="divCodeSiren">
-                <label class="col">Code Siren :</label>
-                <div class="col">
-                    {{ form_widget(formDetail.codeSiren) }}
-                </div>
+        {# CodeSiren #}
+        <div id="divCodeSiren" class="row">
+            <label class="col-2">Code Siren :</label>
+            <div class="col">
+                {{ form_widget(formDetail.codeSiren) }}
             </div>
         </div>
-        <div class="row">
 
-            {# Nom #}
-            <div class="col-sm-12">
-                <div id="divNom" class="form-group">
-                    {{ form_row(formDetail.nom) }}
-                </div>
+        {# Nom #}
+        <div id="divNom" class="row">
+            <label class="col-2">Entreprise :</label>
+            <div class="col">
+                {{ form_row(formDetail.nom) }}
             </div>
+        </div>
 
-            {# Contacts #}
-            <div class="col-sm-12">
-                    <div id="divContacts" class="form-group">
-                        <ul class="ulContacts">
-                            {% for contact in formDetail.contacts %}
-                                <li>
-                                    {{ form_row(formDetail.contact.civilite) }}
-                                    {{ form_row(formDetail.contact.nom) }}
-                                    {{ form_row(formDetail.contact.prenom) }}
-                                    {{ form_row(formDetail.contact.fonction) }}
-                                    {{ form_row(formDetail.contact.email) }}
-                                    {{ form_row(formDetail.contact.telephone) }}
-                                    {{ form_row(formDetail.contact.notes) }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+        {# Contacts #}
+        <div id="divContacts" class="row">
+            <label class="col-2">Contacts :</label>
+            <div class="col">
+                <ul class="ulContacts"  data-prototype="{{ form_widget(formDetail.contacts.vars.prototype)|e('html_attr') }}">
+                    {% for contact in formDetail.contacts %}
+                        <li>
+                            {{ form_row(contact.civilite) }}
+                            {{ form_row(contact.nom) }}
+                            {{ form_row(contact.prenom) }}
+                            {{ form_row(contact.fonction) }}
+                            {{ form_row(contact.email) }}
+                            {{ form_row(contact.telephone) }}
+                            {{ form_row(contact.notes) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     
+        {# ConventionCollective #}
+        <div id="divConventionCollective" class="row">
             {# ConventionCollective #}
-            <div class="col-sm-12">
-                <div id="divConventionCollective" class="form-group">
-                    {{ form_row(formDetail.conventionCollective) }}
-                </div>
+            <label class="col-2">Convention collective :</label>
+            <div class="col">
+                {{ form_row(formDetail.conventionCollective) }}
             </div>
+        </div>
 
-            {# trancheEffectifs #}
-            <div class="col-sm-12">
-                <div id="divTrancheEffectif" class="form-group">
-                    {{ form_row(formDetail.trancheEffectifs) }}
-                </div>
+        {# trancheEffectifs #}
+        <div id="divTrancheEffectif" class="row">
+            <label class="col-2">Tranche d'effectifs :</label>
+            <div class="col">
+                {{ form_row(formDetail.trancheEffectifs) }}
             </div>
+        </div>
 
-            {# NbAdherents #}
-            <div class="col-sm-12">
-                <div id="divNbAdherents" class="form-group">
-                    {{ form_row(formDetail.nbAdherents) }}
-                </div>
+        {# NbAdherents #}
+        <div id="divNbAdherents" class="row">
+            <label class="col-2">Nombre d'adhérents :</label>
+            <div class="col">
+                {{ form_row(formDetail.nbAdherents) }}
             </div>
+        </div>
 
-            {# Notes #}
-            <div class="col-sm-12">
-                <div id="divNotes" class="form-group">
-                    {{ form_row(formDetail.notes) }}
-                </div>
+        {# Notes #}
+        <div id="divNotes" class="row">
+            <label class="col-2">Notes :</label>
+            <div class="col">
+                {{ form_row(formDetail.notes) }}
             </div>
         </div>
             
@@ -103,9 +85,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/javascript/gepar-documents.js"></script>
     <script>
         var nomEcran = "entreprise";
     </script>
-    <script type="text/javascript" src="/javascript/gepar-contacts.js"></script>
+    <script type="text/javascript" src="/javascript/guepar-contacts.js"></script>
 {% endblock %}

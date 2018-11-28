@@ -22,39 +22,42 @@ class EntrepriseType extends AbstractType
                     'placeholder' => 'Code Siren de l\'entreprise',
                 ]])
             ->add('nom', TextType::class, [
-                'label' => 'Nom', 
+                'label' => false, 
                 'attr' => [
                     'placeholder' => 'Nom de l\'entreprise',
                 ]])
             ->add('contacts', CollectionType::class, [
                 'label' => false, 
                 'entry_type' => ContactType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
                 'entry_options' => [
                     'label' => false,
-            ]])
+                ]])
             ->add('conventionCollective', TextType::class, [
-                'label' => 'Convention collective', 
+                'label' => false, 
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'ID de la Convention Collective',
                 ]])
             ->add('trancheEffectifs', TextType::class, [
-                'label' => 'Tranche d\'effectifs', 
+                'label' => false, 
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Tranche d\'effectifs de l\'entreprise',
                 ]])
             ->add('nbAdherents', IntegerType::class, [
-                'label' => 'Nombre d\'adhérents', 
+                'label' => false, 
                 'empty_data' => -1,
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Nombre d\'adhérents dans l\'entreprise',
                 ]])
             ->add('notes', TextareaType::class, [
-                'label' => 'Notes', 
+                'label' => false, 
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [

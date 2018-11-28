@@ -84,7 +84,7 @@ class Entreprise
     private $deletedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="entreprise")
+     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="entreprise", cascade={"persist"}, orphanRemoval=true)
      */
     private $contacts;
 
