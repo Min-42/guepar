@@ -36,7 +36,10 @@
             <td>{{ entreprise.nom}}</td>
             <td>
                 {% for document in entreprise.documents %}
-                    {{ document.fileOriginalName }} : {{ document.fileOriginalName }}
+                    {% if not loop.first %}
+                        <br>
+                    {% endif %}
+                    <a href="{{ document.documentName }}" target="_blank">{{ document.categorie }}</a>
                 {% endfor %}
             </td>
             <td>

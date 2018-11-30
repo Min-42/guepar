@@ -1,39 +1,39 @@
-var $collectionHolder;
+var $collectionContactHolder;
 
 // Préparation du lien "ajouter un contact"
 var $addContactButton = $('<button type="button" class="add_contact_link btn btn-sm btn-primary">Ajouter un contact</button>');
-var $newLinkLi = $('<li></li>').append($addContactButton);
+var $newContactLinkLi = $('<li></li>').append($addContactButton);
 
 $(function() {
     // Récupère l'ul qui contient la collections de contacts
-    $collectionHolder = $('ul.ulContacts');
+    $collectionContactHolder = $('ul.ulContacts');
 
     // pour chaque contact : bouton édit, bouton suppression, affichage en texte et champs cachés
-    $collectionHolder.find('li').each(function() {
+    $collectionContactHolder.find('li').each(function() {
         addContactFormDeleteLink($(this));
         addContactFormEditLink($(this));
-        toggleEditFields($(this));
+        toggleContactEditFields($(this));
     });
 
     // Ajout du bouton "Ajouter un contact"
-    $collectionHolder.append($newLinkLi);
+    $collectionContactHolder.append($newContactLinkLi);
 
     // count the current form inputs we have use that as the new
     // index when inserting a new item
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+    $collectionContactHolder.data('index', $collectionContactHolder.find(':input').length);
 
     $addContactButton.on('click', function(e) {
         // add a new contact form (see next code block)
-        addContactForm($collectionHolder, $newLinkLi);
+        addContactForm($collectionContactHolder, $newContactLinkLi);
     });
 });
 
-function addContactForm($collectionHolder, $newLinkLi) {
+function addContactForm($collectionContactHolder, $newContactLinkLi) {
     // Get the data-prototype explained earlier
-    var prototype = $collectionHolder.data('prototype');
+    var prototype = $collectionContactHolder.data('prototype');
 
     // get the new index
-    var index = $collectionHolder.data('index');
+    var index = $collectionContactHolder.data('index');
 
     var newForm = prototype;
 
@@ -42,12 +42,12 @@ function addContactForm($collectionHolder, $newLinkLi) {
     newForm = newForm.replace(/__name__/g, index);
 
     // increase the index with one for the next item
-    $collectionHolder.data('index', index + 1);
+    $collectionContactHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Ajouter un contact" link li
     var $newFormLi = $('<li></li>').append(newForm);
     addContactFormDeleteLink($newFormLi);
-    $newLinkLi.before($newFormLi);
+    $newContactLinkLi.before($newFormLi);
 }
 
 function addContactFormDeleteLink($contactFormLi) {
@@ -61,11 +61,11 @@ function addContactFormDeleteLink($contactFormLi) {
 }
 
 function addContactFormEditLink($contactFormLi) {
-    var $editFormButton = $('<a href"#"><img src="/images/ico-edit.ico" class="ico-edit"></a>');
-    $contactFormLi.prepend($editFormButton);
+    var $contactFormButton = $('<a href"#"><img src="/images/ico-edit.ico" class="ico-edit"></a>');
+    $contactFormLi.prepend($contactFormButton);
 
-    $editFormButton.on('click', function(e) {
-        toggleEditFields($contactFormLi);
+    $contactFormButton.on('click', function(e) {
+        toggleContactEditFields($contactFormLi);
     });
 }
 
@@ -75,15 +75,15 @@ function addContactValues($contactFormLi) {
         if (index == 0) contactValue += $(this).val();
         if (index == 1) contactValue += " "+$(this).val();
         if (index == 2) contactValue += " "+$(this).val();
-        if (index == 3) contactValue += " - Fct : "+$(this).val();
-        if (index == 4) contactValue += " - email : "+$(this).val();
-        if (index == 5) contactValue += " - tel : "+$(this).val();
-        if (index == 6) contactValue += " - notes : "+$(this).val();
+        if (index == 3 && $(this).val()!= "") contactValue += "<br>&nbsp;&nbsp;&nbsp;Fonction : "+$(this).val();
+        if (index == 4 && $(this).val()!= "") contactValue += "<br>&nbsp;&nbsp;&nbsp;Email : "+$(this).val();
+        if (index == 5 && $(this).val()!= "") contactValue += "<br>&nbsp;&nbsp;&nbsp;Téléphone : "+$(this).val();
+        if (index == 6 && $(this).val()!= "") contactValue += "<br>&nbsp;&nbsp;&nbsp;Notes : "+$(this).val();
     });
     $contactFormLi.find('#valeursContact').html(contactValue);
 }
 
-function toggleEditFields($contactFormLi, edit=false) {
+function toggleContactEditFields($contactFormLi, edit=false) {
     $contactFormLi.find('div').each(function() {
         $(this).toggle();
     });

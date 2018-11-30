@@ -26,6 +26,15 @@ class EntrepriseType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Nom de l\'entreprise',
                 ]])
+            ->add('documents', CollectionType::class, [
+                'label' => false, 
+                'entry_type' => DocumentType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'entry_options' => [
+                    'label' => false,
+                ]])
             ->add('contacts', CollectionType::class, [
                 'label' => false, 
                 'entry_type' => ContactType::class,

@@ -13,7 +13,7 @@ class DocumentType extends AbstractType
     {
         $builder
             ->add('categorie')
-            ->add('fileName')
+            ->add('documentName')
         ;
     }
 

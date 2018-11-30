@@ -24,22 +24,22 @@ class Document
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fileName;
+    private $documentName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fileOriginalName;
+    private $documentOriginalName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fileExtension;
+    private $documentExtension;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fileSize;
+    private $documentSize;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Entreprise", inversedBy="documents")
@@ -71,79 +71,79 @@ class Document
         return $this->categorie;
     }
 
-    public function setCategorie(string $categorie): self
+    public function setCategorie(string $categorie)
     {
         $this->categorie = $categorie;
 
         return $this;
     }
 
-    public function getFileName(): ?string
+    public function getDocumentName()
     {
-        return $this->fileName;
+        return $this->documentName;
     }
 
-    public function setFileName(string $fileName): self
+    public function setDocumentName($documentName)
     {
-        $this->fileName = $fileName;
+        $this->documentName = $documentName;
 
         return $this;
     }
 
-    public function getFileOriginalName(): ?string
+    public function getDocumentOriginalName()
     {
-        return $this->fileOriginalName;
+        return $this->documentOriginalName;
     }
 
-    public function setFileOriginalName(string $fileOriginalName): self
+    public function setDocumentOriginalName($documentOriginalName)
     {
-        $this->fileOriginalName = $fileOriginalName;
+        $this->documentOriginalName = $documentOriginalName;
 
         return $this;
     }
 
-    public function getFileExtension(): ?string
+    public function getDocumentExtension()
     {
-        return $this->fileExtension;
+        return $this->documentExtension;
     }
 
-    public function setFileExtension(string $fileExtension): self
+    public function setDocumentExtension($documentExtension)
     {
-        $this->fileExtension = $fileExtension;
+        $this->documentExtension = $documentExtension;
 
         return $this;
     }
 
-    public function getFileSize(): ?string
+    public function getDocumentSize()
     {
-        return $this->fileSize;
+        return $this->documentSize;
     }
 
-    public function setFileSize(string $fileSize): self
+    public function setDocumentSize($fileSize)
     {
-        $this->fileSize = $fileSize;
+        $this->documentSize = $documentSize;
 
         return $this;
     }
 
-    public function getEntreprise(): ?Entreprise
+    public function getEntreprise()
     {
         return $this->entreprise;
     }
 
-    public function setEntreprise(?Entreprise $entreprise): self
+    public function setEntreprise($entreprise)
     {
         $this->entreprise = $entreprise;
 
         return $this;
     }
 
-    public function getAttachedTo(): ?string
+    public function getAttachedTo()
     {
         return $this->attachedTo;
     }
 
-    public function setAttachedTo(string $attachedTo): self
+    public function setAttachedTo($attachedTo)
     {
         $this->attachedTo = $attachedTo;
 
@@ -155,19 +155,19 @@ class Document
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt)
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedBy(): ?string
+    public function getCreatedBy()
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(string $createdBy): self
+    public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
 
