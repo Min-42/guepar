@@ -119,7 +119,7 @@ class Document
         return $this->documentSize;
     }
 
-    public function setDocumentSize($fileSize)
+    public function setDocumentSize($documentSize)
     {
         $this->documentSize = $documentSize;
 

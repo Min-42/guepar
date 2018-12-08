@@ -39,7 +39,7 @@
                     {% if not loop.first %}
                         <br>
                     {% endif %}
-                    <a href="{{ document.documentName }}" target="_blank">{{ document.categorie }}</a>
+                    <a href="{{ asset('uploads/documents/' ~ document.documentName) }}" target="_blank">{{ document.categorie }}</a>
                 {% endfor %}
             </td>
             <td>

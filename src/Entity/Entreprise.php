@@ -29,9 +29,14 @@ class Entreprise
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Document", mappedBy="entreprise")
+     * @ORM\OneToMany(targetEntity="App\Entity\Document", mappedBy="entreprise", cascade={"persist"}, orphanRemoval=true)
      */
     private $documents;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="entreprise", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $contacts;
 
     /**
      * @ORM\Column(type="string", length=4)
@@ -83,15 +88,18 @@ class Entreprise
      */
     private $deletedBy;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="entreprise", cascade={"persist"}, orphanRemoval=true)
-     */
-    private $contacts;
-
     public function __construct()
     {
         $this->documents = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->conventionCollective = '';
+        $this->trancheEffectifs = '';
+        $this->nbAdherents = 0;
+        $this->notes = '';
+        $this->createdAt = new \DateTime();
+        $this->createdBy = '';
+        $this->modifiedAt = new \DateTime();
+        $this->modifiedBy = '';
     }
 
     public function getId()
@@ -148,6 +156,37 @@ class Entreprise
             // set the owning side to null (unless already changed)
             if ($document->getEntreprise() === $this) {
                 $document->setEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contact[]
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            // set the owning side to null (unless already changed)
+            if ($contact->getEntreprise() === $this) {
+                $contact->setEntreprise(null);
             }
         }
 
@@ -270,37 +309,6 @@ class Entreprise
     public function setDeletedBy(string $deletedBy)
     {
         $this->deletedBy = $deletedBy;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Contact[]
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    public function addContact(Contact $contact)
-    {
-        if (!$this->contacts->contains($contact)) {
-            $this->contacts[] = $contact;
-            $contact->setEntreprise($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContact(Contact $contact)
-    {
-        if ($this->contacts->contains($contact)) {
-            $this->contacts->removeElement($contact);
-            // set the owning side to null (unless already changed)
-            if ($contact->getEntreprise() === $this) {
-                $contact->setEntreprise(null);
-            }
-        }
 
         return $this;
     }

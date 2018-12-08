@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    documentDirectory: '%kernel.project_dir%/public/uploads/documents'
 
 services:
     # default configuration for services in *this* file
@@ -27,5 +28,17 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Service d'upload de documents
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%documentDirectory%'
+
+    # Service de gestion des fichiers documents uploadés
+    App\Service\DocumentGestion:
+        arguments:
+            $targetDirectory: '%documentDirectory%'
+
+    # Service de documents à la mise à jour en base de donnée
+    App\EventListener\DocumentListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }

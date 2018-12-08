@@ -35,19 +35,19 @@ function addContactForm($collectionContactHolder, $newContactLinkLi) {
     // get the new index
     var index = $collectionContactHolder.data('index');
 
-    var newForm = prototype;
+    var newFormContact = prototype;
 
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
-    newForm = newForm.replace(/__name__/g, index);
+    newFormContact = newFormContact.replace(/__name__/g, index);
 
     // increase the index with one for the next item
     $collectionContactHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Ajouter un contact" link li
-    var $newFormLi = $('<li></li>').append(newForm);
-    addContactFormDeleteLink($newFormLi);
-    $newContactLinkLi.before($newFormLi);
+    var $newFormContactLi = $('<li></li>').append(newFormContact);
+    addContactFormDeleteLink($newFormContactLi);
+    $newContactLinkLi.before($newFormContactLi);
 }
 
 function addContactFormDeleteLink($contactFormLi) {

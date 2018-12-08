@@ -26,6 +26,21 @@
             </div>
         </div>
 
+        {# Documents #}
+        <div id="divDocuments" class="row">
+            <label class="col-2">Documents :</label>
+            <div class="col">
+                <ul class="ulDocuments"  data-prototype="{{ form_widget(formDetail.documents.vars.prototype)|e('html_attr') }}">
+                    {% for document in formDetail.documents %}
+                        <li>
+                            {{ form_row(document.categorie) }}
+                            {{ form_row(document.documentName) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
         {# Contacts #}
         <div id="divContacts" class="row">
             <label class="col-2">Contacts :</label>
@@ -89,4 +104,5 @@
         var nomEcran = "entreprise";
     </script>
     <script type="text/javascript" src="/javascript/guepar-contacts.js"></script>
+    <script type="text/javascript" src="/javascript/guepar-documents.js"></script>
 {% endblock %}
