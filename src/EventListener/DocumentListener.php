@@ -4,6 +4,8 @@
 namespace App\EventListener;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\HttpFoundation\File\File;
+
 use App\Entity\Document;
 use App\Service\DocumentGestion;
 
@@ -44,7 +46,12 @@ class DocumentListener
             return;
         }
 
-        $docNameValue = $entity->getDocumentName()->getFilename();
+        $documentName = $entity->getDocumentName();
+        if ($documentName instanceof File) {
+            $docNameValue = $entity->getDocumentName()->getFilename();
+        } else {
+            $docNameValue = $documentName;
+        }
         $this->documentGestion->supprime($docNameValue);
     }
 }

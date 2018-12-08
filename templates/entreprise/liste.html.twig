@@ -29,11 +29,11 @@
         {% endif %}
         <tr>
             <td>
-                <a href="{{ path('entreprise_detail',{'id': entreprise.id}) }}">Editer</a>
-                &nbsp;<a href="">Supprimer</a>
+                <a href="{{ path('entreprise_detail',{'id': entreprise.id}) }}"><img src="/images/ico-edit.ico" class="ico-edit"></a>
+                <a href="#"><img src="/images/ico-suppress.png" class="ico-suppress" onClick="confirmeSuppression('{{ entreprise.nom }}','{{ entreprise.id }}')"></a>
             </td>
             <td>{{ entreprise.codeSiren }}</td>
-            <td>{{ entreprise.nom}}</td>
+            <td>{{ entreprise.nom }}</td>
             <td>
                 {% for document in entreprise.documents %}
                     {% if not loop.first %}
@@ -70,4 +70,14 @@
             </table>
         {% endif %}
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function confirmeSuppression(entreprise, id) {
+            if (confirm("Voulez-vous réellement supprimer l'entreprise : "+entreprise+" ?")) {
+                document.location.href="/entreprise/remove/"+id;
+            }
+        }
+    </script>
 {% endblock %}

@@ -73,4 +73,17 @@ class EntrepriseController extends AbstractController
             'entreprises' => $entreprises,
         ]);
     }
+
+    /**
+     * @Route("/entreprise/remove/{id}", name="entreprise_remove")
+     */
+    public function remove(Entreprise $entreprise, EntrepriseRepository $repo, ObjectManager $manager)
+    {
+        $entreprise = $repo->find($entreprise->getId());
+
+        $manager->remove($entreprise);
+        $manager->flush();
+        
+        return $this->redirectToRoute('entreprise_liste');
+    }
 }

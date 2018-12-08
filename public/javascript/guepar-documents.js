@@ -58,7 +58,9 @@ function addDocumentFormDeleteLink($documentFormLi) {
     $documentFormLi.prepend($removeDocumentFormButton);
 
     $removeDocumentFormButton.on('click', function(e) {
-        $documentFormLi.remove();
+        if (confirm("Voulez-vous réellement supprimer le document ?")) {
+            $documentFormLi.remove();
+        }
     });
 }
 
