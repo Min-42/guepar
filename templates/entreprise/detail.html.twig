@@ -35,6 +35,9 @@
                         <li>
                             {{ form_row(document.categorie) }}
                             {{ form_row(document.documentName) }}
+                            <span class="lienDocument d-none">
+                                {{ asset('uploads/documents/' ~ entreprise.documents[loop.index0].documentName.fileName) }}
+                            </span>
                         </li>
                     {% endfor %}
                 </ul>

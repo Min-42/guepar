@@ -23,7 +23,6 @@ class EntrepriseController extends AbstractController
     {
         if (!$entreprise) {
             $entreprise = new Entreprise();
-//            $this->setDefault($entreprise);
         } else {
             foreach ($entreprise->getDocuments() as $document) {
                 $document->setDocumentName(
@@ -39,7 +38,6 @@ class EntrepriseController extends AbstractController
             // Gestion des documents rattachés
             foreach ($entreprise->getDocuments() as $document) {
                 $file = $document->getDocumentName();
-dump($document);
                 if ($file) {
                     $fileInfo = $uploader->upload($file);
                     $document->setDocumentName($fileInfo['documentName']);
@@ -74,17 +72,5 @@ dump($document);
         return $this->render('entreprise/liste.html.twig', [
             'entreprises' => $entreprises,
         ]);
-    }
-
-    private function setDefault(Entreprise $entreprise) {
-        if ($entreprise->getContacts() === null) $entreprise->setContacts('');
-        if ($entreprise->getConventionCollective() === null) $entreprise->setConventionCollective('');
-        if ($entreprise->getTrancheEffectifs() === null) $entreprise->setTrancheEffectifs('');
-        if ($entreprise->getNbAdherents() === null) $entreprise->setNbAdherents(0);
-        if ($entreprise->getNotes() === null) $entreprise->setNotes('');
-        $entreprise->setCreatedAt(new \DateTime());
-        $entreprise->setCreatedBy("Michel-Creat");
-        $entreprise->setModifiedAt(new \DateTime());
-        $entreprise->setModifiedBy("Michel-Creat");
     }
 }

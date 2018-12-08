@@ -34,4 +34,17 @@ class DocumentListener
             }
         }
     }
+
+    public function postRemove(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+
+        // N'agit que sur les instances de type Document
+        if (!$entity instanceof Document) {
+            return;
+        }
+
+        $docNameValue = $entity->getDocumentName()->getFilename();
+        $this->documentGestion->supprime($docNameValue);
+    }
 }

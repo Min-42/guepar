@@ -51,10 +51,13 @@ function addDocumentForm($collectionDocumentHolder, $newDocumentLinkLi) {
 }
 
 function addDocumentFormDeleteLink($documentFormLi) {
-    var $removeFormButton = $('<a href"#"><img src="/images/ico-suppress.png" class="ico-suppress"></a><span id="valeursDocument"></span>');
-    $documentFormLi.prepend($removeFormButton);
+    var $removeDocumentFormButton = $('<a href"#"><img src="/images/ico-suppress.png" class="ico-suppress"></a>');
+    var $spanDocumentValue = $('<span id="valeursDocument"></span>');
 
-    $removeFormButton.on('click', function(e) {
+    $documentFormLi.prepend($spanDocumentValue);
+    $documentFormLi.prepend($removeDocumentFormButton);
+
+    $removeDocumentFormButton.on('click', function(e) {
         $documentFormLi.remove();
     });
 }
@@ -69,11 +72,9 @@ function addDocumentFormEditLink($documentFormLi) {
 }
 
 function addDocumentValues($documentFormLi) {
-    var documentValue = "";
-    $documentFormLi.find(':input').each(function(index) {
-        if (index == 0) documentValue += $(this).val();
-        if (index == 1) documentValue += " "+$(this).val();
-    });
+    var categorieDocument = $documentFormLi.find(':input').first().val();
+    var lienDocument = $documentFormLi.find('.lienDocument').text();
+    var documentValue = '<a href="'+lienDocument+'" target="_blank">'+categorieDocument+'</a>';
     $documentFormLi.find('#valeursDocument').html(documentValue);
 }
 
