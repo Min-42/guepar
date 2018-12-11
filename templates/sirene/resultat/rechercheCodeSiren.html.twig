@@ -1,43 +1,108 @@
-
 <div id="divCodeSiren" class="row">
     <label class="col-2">Code Siren :</label>
     <div class="col">
-        {{ entreprise['uniteLegale']['siren'] }}
+        {{ codeSiren }}
     </div>
 </div>
 
-{% for periode in entreprise['uniteLegale']['periodesUniteLegale'] %}
-    {% if periode['dateFin']==null %}
-        <div id="divDenomination" class="row">
-            <label class="col-2">Dénomination :</label>
-            <div class="col">
-                {{ periode['denominationUniteLegale'] }}
-            </div>
-        </div>
+<div id="divDenomination" class="row">
+    <label class="col-2">Dénomination :</label>
+    <div class="col">
+        {{ sireneUniteLegale.denomination }}
+    </div>
+</div>
 
-        <div id="divActivite" class="row">
-            <label class="col-2">Activité principale :</label>
-            <div class="col">
-                {{ periode['activitePrincipaleUniteLegale'] }}
-            </div>
-        </div>    
-    {% endif %}
-{% endfor %}
+<div id="divStatut" class="row">
+    <label class="col-2">Etat administratif :</label>
+    <div class="col">
+        {{ sireneUniteLegale.statut }}
+    </div>
+</div>
 
-<div id="divTrancheEffectifs" class="row">
+<div id="divCategorieJuridique" class="row">
+    <label class="col-2">Catégorie juridique :</label>
+    <div class="col">
+        {{ sireneUniteLegale.categorieJuridique }}
+    </div>
+</div>
+
+<div id="divSigle" class="row">
+    <label class="col-2">Sigle :</label>
+    <div class="col">
+        {{ sireneUniteLegale.sigle }}
+    </div>
+</div>
+
+<div id="divDenomination1" class="row">
+    <label class="col-2">Dénomination 1 :</label>
+    <div class="col">
+        {{ sireneUniteLegale.denominationUsuelle1 }}
+    </div>
+</div>
+
+<div id="divDenomination2" class="row">
+    <label class="col-2">Dénomination 2 :</label>
+    <div class="col">
+        {{ sireneUniteLegale.denominationUsuelle2 }}
+    </div>
+</div>
+
+<div id="divDenomination3" class="row">
+    <label class="col-2">Dénomination 3 :</label>
+    <div class="col">
+        {{ sireneUniteLegale.denominationUsuelle3 }}
+    </div>
+</div>
+
+<div id="divActivitePrincipale" class="row">
+    <label class="col-2">Activité principale :</label>
+    <div class="col">
+        {{ sireneUniteLegale.activitePrincipale }} (selon la nomenclature {{ sireneUniteLegale.activitePrincipaleNomenclature }})
+    </div>
+</div>
+
+<div id="divIdAssociation" class="row">
+    <label class="col-2">Identifiant si association :</label>
+    <div class="col">
+        {{ sireneUniteLegale.identifiantAssociation }}
+    </div>
+</div>
+
+<div id="divEconomieSocialaSolidaire" class="row">
+    <label class="col-2">Economie sociale et solidaire :</label>
+    <div class="col">
+        {{ sireneUniteLegale.economieSocialeSolidaire }}
+    </div>
+</div>
+
+<div id="divCarcactereEmployeur" class="row">
+    <label class="col-2">Entreprise employeuse :</label>
+    <div class="col">
+        {{ sireneUniteLegale.caractereEmployeur }}
+    </div>
+</div>    
+
+<div id="divTrancheEffectif" class="row">
     <label class="col-2">Tranche d'effectifs :</label>
     <div class="col">
-        {{ entreprise['uniteLegale']['trancheEffectifsUniteLegale'] }} en {{ entreprise['uniteLegale']['anneeEffectifsUniteLegale'] }}
+        {{ sireneUniteLegale.trancheEffectif }} (en {{ sireneUniteLegale.anneeTrancheEffectif }})
     </div>
-</div>
+</div>    
+
+<div id="divNicSiege" class="row">
+    <label class="col-2">Code NIC du siège :</label>
+    <div class="col">
+        {{ sireneUniteLegale.nicSiege }}
+    </div>
+</div>    
 
 <div id="divCategorieEntreprise" class="row">
-    <label class="col-2">Tranche d'effectifs :</label>
+    <label class="col-2">Catégorie d'entreprise :</label>
     <div class="col">
-        {{ entreprise['uniteLegale']['categorieEntreprise'] }}
+        {{ sireneUniteLegale.categorieEntreprise }} (en {{ sireneUniteLegale.anneeCategorieEntreprise }})
     </div>
-</div>
-
+</div>    
+            
 {#
 <div id="divJson" class="row">
     <label class="col-2">json :</label>
