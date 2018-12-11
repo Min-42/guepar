@@ -1,0 +1,9 @@
+{% if sirene.id == NULL %}
+    <p>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_liste') }}">Liste des entreprises</a>
+    </p>
+{% else %}
+    <p>
+        <a  class='btn btn-sm btn-primary' href="{{ path('entreprise_liste') }}">Liste des entreprises</a>
+    </p>
+{% endif %}

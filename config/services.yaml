@@ -38,12 +38,6 @@ services:
         arguments:
             $targetDirectory: '%documentDirectory%'
 
-    # Service d'accès à la base de données Sirene
-    App\Service\BaseSirene:
-        arguments:
-           $jeton: 321ca85d-eab7-313c-b10b-84f0305d28b6
-           $urlBase: 'https://api.insee.fr/entreprises/sirene/V3/'
-
     # Surveillance des documents lors de la mise à jour en base de donnée
     App\EventListener\DocumentListener:
         tags:

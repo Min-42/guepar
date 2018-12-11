@@ -1,0 +1,48 @@
+
+<div id="divCodeSiren" class="row">
+    <label class="col-2">Code Siren :</label>
+    <div class="col">
+        {{ entreprise['uniteLegale']['siren'] }}
+    </div>
+</div>
+
+{% for periode in entreprise['uniteLegale']['periodesUniteLegale'] %}
+    {% if periode['dateFin']==null %}
+        <div id="divDenomination" class="row">
+            <label class="col-2">Dénomination :</label>
+            <div class="col">
+                {{ periode['denominationUniteLegale'] }}
+            </div>
+        </div>
+
+        <div id="divActivite" class="row">
+            <label class="col-2">Activité principale :</label>
+            <div class="col">
+                {{ periode['activitePrincipaleUniteLegale'] }}
+            </div>
+        </div>    
+    {% endif %}
+{% endfor %}
+
+<div id="divTrancheEffectifs" class="row">
+    <label class="col-2">Tranche d'effectifs :</label>
+    <div class="col">
+        {{ entreprise['uniteLegale']['trancheEffectifsUniteLegale'] }} en {{ entreprise['uniteLegale']['anneeEffectifsUniteLegale'] }}
+    </div>
+</div>
+
+<div id="divCategorieEntreprise" class="row">
+    <label class="col-2">Tranche d'effectifs :</label>
+    <div class="col">
+        {{ entreprise['uniteLegale']['categorieEntreprise'] }}
+    </div>
+</div>
+
+{#
+<div id="divJson" class="row">
+    <label class="col-2">json :</label>
+    <div class="col">
+        {{ json }}
+    </div>
+</div>
+#}

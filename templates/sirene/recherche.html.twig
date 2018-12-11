@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guepar > Sirene{% endblock %}
+
+{% block body %}
+    <h1>Recherche dans la base de données gouvernementale</h1>
+
+    <div class="container-fluid">
+        {{ form_start(formRecherche) }}
+        {% include 'sirene/navigation.html.twig' %}
+
+        {# critere #}
+        <div id="divCritere" class="row">
+            <label class="col-2">Critère de recherche :</label>
+            <div class="col-3">
+                {{ form_widget(formRecherche.critere) }}
+            </div>
+            <div class="col">
+                <a  id="btnRecherche" class='btn btn-sm btn-primary' href="#">Recherche</a>
+            </div>
+        </div>
+        {{ form_end(formRecherche) }}
+
+        {# resultats #}
+        <div id="divResultats" class="row">
+            <label class="col-2">Base gouvernementale :</label>
+            <div id="divBaseSirene" class="col">
+                {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'critere':'791604697'})) }}
+            </div>
+        </div>    
+
+        {% include 'sirene/navigation.html.twig' %}
+    </div>
+{% endblock %}
