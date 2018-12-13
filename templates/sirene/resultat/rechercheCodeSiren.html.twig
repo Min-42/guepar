@@ -1,108 +1,201 @@
+{# CodeSiren #}
 <div id="divCodeSiren" class="row">
     <label class="col-2">Code Siren :</label>
     <div class="col">
-        {{ codeSiren }}
+        {{ sirene.codeSiren }}
     </div>
 </div>
 
+{# Dénomination #}
 <div id="divDenomination" class="row">
     <label class="col-2">Dénomination :</label>
     <div class="col">
-        {{ sireneUniteLegale.denomination }}
+        {{ sirene.uniteLegale.denomination }}
     </div>
 </div>
 
+{# $statut #}
 <div id="divStatut" class="row">
     <label class="col-2">Etat administratif :</label>
     <div class="col">
-        {{ sireneUniteLegale.statut }}
+        {{ sirene.uniteLegale.statut }}
     </div>
 </div>
 
+{# $categorieJuridique #}
 <div id="divCategorieJuridique" class="row">
     <label class="col-2">Catégorie juridique :</label>
     <div class="col">
-        {{ sireneUniteLegale.categorieJuridique }}
+        {{ sirene.uniteLegale.categorieJuridique }}
     </div>
 </div>
 
+{# $sigle #}
 <div id="divSigle" class="row">
     <label class="col-2">Sigle :</label>
     <div class="col">
-        {{ sireneUniteLegale.sigle }}
+        {{ sirene.uniteLegale.sigle }}
     </div>
 </div>
 
+{# $denominationUsuelle1 #}
 <div id="divDenomination1" class="row">
     <label class="col-2">Dénomination 1 :</label>
     <div class="col">
-        {{ sireneUniteLegale.denominationUsuelle1 }}
+        {{ sirene.uniteLegale.denominationUsuelle1 }}
     </div>
 </div>
 
+{# $denominationUsuelle2 #}
 <div id="divDenomination2" class="row">
     <label class="col-2">Dénomination 2 :</label>
     <div class="col">
-        {{ sireneUniteLegale.denominationUsuelle2 }}
+        {{ sirene.uniteLegale.denominationUsuelle2 }}
     </div>
 </div>
 
+{# $denominationUsuelle3 #}
 <div id="divDenomination3" class="row">
     <label class="col-2">Dénomination 3 :</label>
     <div class="col">
-        {{ sireneUniteLegale.denominationUsuelle3 }}
+        {{ sirene.uniteLegale.denominationUsuelle3 }}
     </div>
 </div>
 
+{# $activitePrincipale #}
+{# $activitePrincipaleNomenclature #}
 <div id="divActivitePrincipale" class="row">
     <label class="col-2">Activité principale :</label>
     <div class="col">
-        {{ sireneUniteLegale.activitePrincipale }} (selon la nomenclature {{ sireneUniteLegale.activitePrincipaleNomenclature }})
+        {{ sirene.uniteLegale.activitePrincipale }} (selon la nomenclature {{ sirene.uniteLegale.activitePrincipaleNomenclature }})
     </div>
 </div>
 
+{# $identifiantAssociation #}
 <div id="divIdAssociation" class="row">
     <label class="col-2">Identifiant si association :</label>
     <div class="col">
-        {{ sireneUniteLegale.identifiantAssociation }}
+        {{ sirene.uniteLegale.identifiantAssociation }}
     </div>
 </div>
 
+{# $economieSocialeSolidaire #}
 <div id="divEconomieSocialaSolidaire" class="row">
     <label class="col-2">Economie sociale et solidaire :</label>
     <div class="col">
-        {{ sireneUniteLegale.economieSocialeSolidaire }}
+        {{ sirene.uniteLegale.economieSocialeSolidaire }}
     </div>
 </div>
 
+{# $caractereEmployeur #}
 <div id="divCarcactereEmployeur" class="row">
     <label class="col-2">Entreprise employeuse :</label>
     <div class="col">
-        {{ sireneUniteLegale.caractereEmployeur }}
+        {{ sirene.uniteLegale.caractereEmployeur }}
     </div>
 </div>    
 
+{# $trancheEffectif #}
+{# $anneeTrancheEffectif #}
 <div id="divTrancheEffectif" class="row">
     <label class="col-2">Tranche d'effectifs :</label>
     <div class="col">
-        {{ sireneUniteLegale.trancheEffectif }} (en {{ sireneUniteLegale.anneeTrancheEffectif }})
+        {{ sirene.uniteLegale.trancheEffectif }} (en {{ sirene.uniteLegale.anneeTrancheEffectif }})
     </div>
 </div>    
 
+{# $nicSiege #}
 <div id="divNicSiege" class="row">
     <label class="col-2">Code NIC du siège :</label>
     <div class="col">
-        {{ sireneUniteLegale.nicSiege }}
+        {{ sirene.uniteLegale.nicSiege }}
     </div>
 </div>    
 
+{# $categorieEntreprise #}
+{# $anneeCategorieEntreprise #}
 <div id="divCategorieEntreprise" class="row">
     <label class="col-2">Catégorie d'entreprise :</label>
     <div class="col">
-        {{ sireneUniteLegale.categorieEntreprise }} (en {{ sireneUniteLegale.anneeCategorieEntreprise }})
+        {{ sirene.uniteLegale.categorieEntreprise }} (en {{ sirene.uniteLegale.anneeCategorieEntreprise }})
     </div>
 </div>    
-            
+
+{# $Etablissements #}
+<div id="divEtablissements" class="row">
+    <label class="col-2">Etablissements actifs :</label>
+    <div class="col">
+        {% for etablissement in sirene.etablissements %}
+            {% if loop.first %}
+            <table border='1'>
+                <tr>
+                    <th>Etab</th>
+                    <th>nic</th>
+                    <th>Adresse</th>
+                    <th>Effectifs</th>
+                    <th>Activité principale</th>
+                    <th>Enseigne</th>
+                    <th>Dénomination</th>
+                    <th>Employeur</th>
+                </tr>
+            {% endif %}
+            <tr>
+                <td>
+                    {# etablissementSiege #}
+                    {% if etablissement.etablissementSiege %}
+                        siège
+                    {% else %}
+                        Etab.
+                    {% endif %}
+                </td>
+                <td>
+                    {# nic #}
+                    {{ etablissement.nic }}
+                </td>
+                <td>
+                    {# adresse #}
+                    {{ etablissement.adresse.complementAdresse }}
+                    <br/>{{ etablissement.adresse.numeroVoie }}{{ etablissement.adresse.indiceRepetition }} {{ etablissement.adresse.typeVoie }} {{ etablissement.adresse.libelleVoie }}
+                    <br/>{{ etablissement.adresse.codePostal }} {{ etablissement.adresse.libelleCommune }} {{ etablissement.adresse.codeCedex }} {{ etablissement.adresse.libelleCedex }}
+                    {% if etablissement.adresse.codePaysEtranger != null %}
+                        <br/>{{ etablissement.adresse.libellePaysEtranger }}
+                    {% endif %}
+                </td>
+                <td>
+                    {# trancheEffectifs #}
+                    {# anneEffectifs #}
+                    {{ etablissement.trancheEffectifs }}
+                    <br/>en {{ etablissement.anneEffectifs }}
+                </td>
+                <td>
+                    {# activitePrincipale #}
+                    {# nomenclatureActivitePrincipale #}
+                    {{ etablissement.activitePrincipale }}
+                    <br/>selon nomenclature {{ etablissement.nomenclatureActivitePrincipale }}
+                </td>
+                <td>
+                    {# enseigne1 #}
+                    {# enseigne2 #}
+                    {# enseigne3 #}
+                    {{ etablissement.enseigne1 }}
+                    <br/>{{ etablissement.enseigne2 }}
+                    <br/>{{ etablissement.enseigne3 }}
+                </td>
+                <td>
+                    {# denominationUsuelle #}
+                    {{ etablissement.denominationUsuelle }}
+                </td>
+                <td>
+                    {# caractereEmployeur #}
+                    {{ etablissement.caractereEmployeur }}
+                </td>
+            </tr>
+            {% if loop.last %}
+                </table>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
 {#
 <div id="divJson" class="row">
     <label class="col-2">json :</label>

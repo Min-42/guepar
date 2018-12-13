@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Sirene;
 use App\Entity\SireneUniteLegale;
+use App\Entity\SireneEtablissement;
+use App\Entity\SireneAdresse;
 use App\Form\SireneType;
 use App\Service\BaseSirene;
 
@@ -46,17 +48,15 @@ class SireneController extends AbstractController
             $result = $this->executeRechercheEtablissements($critere);
             
             // Si pas d'erreur curl
-            //      récupérer et analyser en-tête sirene
-            // Si erreur curl ou accè_s base Sirene
+            //      récupérer en-tête sirene
+            // Si erreur curl ou accès base Sirene
             //      Render message d'erreur
 
             $tabResult = json_decode($result['valeur'], true);
-            $codeSiren = $tabResult['etablissements'][0]['siren'];
-            $sireneUniteLegale = new SireneUniteLegale($tabResult['etablissements'][0]['uniteLegale']);
+            $sirene = $this->extraiteInfoSirene($tabResult['etablissements']);
 
             return $this->render('sirene/resultat/rechercheCodeSiren.html.twig', [
-                'codeSiren' => $codeSiren,
-                'sireneUniteLegale' => $sireneUniteLegale,
+                'sirene' => $sirene,
                 'json' => $result['valeur'],
             ]);
         }
@@ -109,5 +109,32 @@ class SireneController extends AbstractController
             return "Code siren";
         }
         return "libellé";
+    }
+
+    private function extraiteInfoSirene($valeurSirene) {
+        $sirene = new Sirene();
+
+        foreach ($valeurSirene as $SireneEtablissement) {
+            $actif=false;
+            $first=true;
+            foreach ($SireneEtablissement['periodesEtablissement'] as $key => $periodeEtablissement) {
+                if ($periodeEtablissement['etatAdministratifEtablissement'] == "A") {
+                    $actif = true;
+                    $indicePeriode = $key;
+                    break;
+                }
+            }
+            if ($actif) {
+                if ($first){
+                    $sirene->setCodeSiren($SireneEtablissement['siren']);
+                    $sirene->setUniteLegale(new SireneUniteLegale($SireneEtablissement['uniteLegale']));
+                    $first = false;
+                }
+                $sireneEtablissement = new SireneEtablissement($SireneEtablissement, $SireneEtablissement['periodesEtablissement'][$indicePeriode]);
+                $sireneEtablissement->setAdresse(new SireneAdresse($SireneEtablissement['adresseEtablissement']));
+                $sirene->addEtablissement($sireneEtablissement);
+            }
+        }
+        return $sirene;
     }
 }

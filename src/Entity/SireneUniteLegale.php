@@ -16,17 +16,17 @@ class SireneUniteLegale
     /**
      * 
      */
+    private $denomination;
+
+    /**
+     * 
+     */
     private $statut;
 
     /**
      * 
      */
     private $categorieJuridique;
-
-    /**
-     * 
-     */
-    private $denomination;
 
     /**
      * 
@@ -100,9 +100,9 @@ class SireneUniteLegale
 
     public function __construct($uniteLegale)
     {
+        $this->denomination = $uniteLegale['denominationUniteLegale'];
         $this->statut = $uniteLegale['etatAdministratifUniteLegale'];
         $this->categorieJuridique = $uniteLegale['categorieJuridiqueUniteLegale'];
-        $this->denomination = $uniteLegale['denominationUniteLegale'];
         $this->sigle = $uniteLegale['sigleUniteLegale'];
         $this->denominationUsuelle1 = $uniteLegale['denominationUsuelle1UniteLegale'];
         $this->denominationUsuelle2 = $uniteLegale['denominationUsuelle2UniteLegale'];
@@ -122,6 +122,18 @@ class SireneUniteLegale
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getDenomination()
+    {
+        return $this->denomination;
+    }
+
+    public function setDenomination($denomination)
+    {
+        $this->denomination = $denomination;
+
+        return $this;
     }
 
     public function getStatut()
@@ -144,18 +156,6 @@ class SireneUniteLegale
     public function setCategorieJuridique($categorieJuridique)
     {
         $this->categorieJuridique = $categorieJuridique;
-
-        return $this;
-    }
-
-    public function getDenomination()
-    {
-        return $this->denomination;
-    }
-
-    public function setDenomination($denomination)
-    {
-        $this->denomination = $denomination;
 
         return $this;
     }

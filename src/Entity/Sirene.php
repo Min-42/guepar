@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * 
  */
@@ -34,7 +36,7 @@ class Sirene
 
     public function __construct()
     {
-        $this->etablissements = [];
+        $this->etablissements = new ArrayCollection();
     }
 
     public function getId()
@@ -62,6 +64,26 @@ class Sirene
     public function setCodeSiren($codeSiren)
     {
         $this->codeSiren = $codeSiren;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of unitelegale
+     */ 
+    public function getUnitelegale()
+    {
+        return $this->unitelegale;
+    }
+
+    /**
+     * Set the value of unitelegale
+     *
+     * @return  self
+     */ 
+    public function setUnitelegale(SireneUniteLegale $unitelegale)
+    {
+        $this->unitelegale = $unitelegale;
 
         return $this;
     }
