@@ -25,6 +25,7 @@ class SireneType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Sirene::class,
+            'attr' => ['id' => 'frmSirene']
         ]);
     }
 }

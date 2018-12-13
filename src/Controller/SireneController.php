@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Entity\Sirene;
 use App\Entity\SireneUniteLegale;
@@ -19,7 +20,7 @@ class SireneController extends AbstractController
      * @Route("/sirene/{id}", name="sirene_detail")
      * @Route("/sirene", name="sirene_recherche")
      */
-    public function index(Sirene $sirene = null, Request $request)
+    public function index(Sirene $sirene = null, Request $request, SessionInterface $session)
     {
         if (!$sirene) {
             $sirene = new Sirene();
@@ -28,6 +29,10 @@ class SireneController extends AbstractController
         $formRecherche = $this->createForm(SireneType::class, $sirene);
         $formRecherche->handleRequest($request);
 
+        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
+            $session->set('critereSirene', $sirene->getCritere());
+        }
+
         return $this->render('sirene/recherche.html.twig', [
             'formRecherche' => $formRecherche->createView(),
             'sirene' => $sirene,
@@ -35,9 +40,15 @@ class SireneController extends AbstractController
     }
 
     /**
-     * @Route("/sirene/result", name="sirene_result")
+     * @Route("/sirene/result/{critere}", name="sirene_result")
      */
-    public function resultatRecherche($critere = null) {
+    public function resultatRecherche($critere = null, SessionInterface $session) {
+dump($session->get('critereSirene'));
+        // Aucun critère de recherche renseigné
+        if (!$critere and !$session->get('critereSirene')) {
+            return $this->render('sirene/resultat/rechercheVide.html.twig');
+        }
+
         $typeRecherche = $this->quelCritere($critere);
 
         if ($typeRecherche == "aucun") {

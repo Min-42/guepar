@@ -100,7 +100,10 @@
 <div id="divTrancheEffectif" class="row">
     <label class="col-2">Tranche d'effectifs :</label>
     <div class="col">
-        {{ sirene.uniteLegale.trancheEffectif }} (en {{ sirene.uniteLegale.anneeTrancheEffectif }})
+        {{ sirene.uniteLegale.trancheEffectif | trancheEffectifs}}
+        {% if sirene.uniteLegale.trancheEffectif != "NN" and sirene.uniteLegale.trancheEffectif %}
+            (en {{ sirene.uniteLegale.anneeTrancheEffectif }})
+        {% endif %}
     </div>
 </div>    
 
@@ -164,8 +167,10 @@
                 <td>
                     {# trancheEffectifs #}
                     {# anneEffectifs #}
-                    {{ etablissement.trancheEffectifs }}
-                    <br/>en {{ etablissement.anneEffectifs }}
+                    {{ etablissement.trancheEffectifs | trancheEffectifs }}
+                    {% if etablissement.trancheEffectifs != "NN" and etablissement.trancheEffectifs %}
+                        <br/>en {{ etablissement.anneEffectifs }}
+                    {% endif %}
                 </td>
                 <td>
                     {# activitePrincipale #}

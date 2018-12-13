@@ -7,27 +7,27 @@
 
     <div class="container-fluid">
         {{ form_start(formRecherche) }}
-        {% include 'sirene/navigation.html.twig' %}
-
         {# critere #}
         <div id="divCritere" class="row">
-            <label class="col-2">Critère de recherche :</label>
+            <label class="col-2">&nbsp;</label>
             <div class="col-3">
                 {{ form_widget(formRecherche.critere) }}
             </div>
             <div class="col">
-                <a  id="btnRecherche" class='btn btn-sm btn-primary' href="#">Recherche</a>
+                <input type="image" src="/images/ico-suppress.png" id="btnRecherche">
             </div>
         </div>
         {{ form_end(formRecherche) }}
+        <div class="loading"></div>
 
+        {% include 'sirene/navigation.html.twig' %}
         {# resultats #}
         <div id="divResultats" class="row">
             <label class="col-2">Base gouvernementale :</label>
             <div id="divBaseSirene" class="col">
+                    {{ render(controller('App\\Controller\\SireneController::resultatRecherche')) }}
+{# exemples de test
                 {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'critere':'791604697'})) }}
-{#
-                <br /><br /><br /><br />
                 {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'critere':'781092036'})) }}
 #}
             </div>
@@ -35,4 +35,30 @@
 
         {% include 'sirene/navigation.html.twig' %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(".loading").hide();
+        $(function() {
+            $("#frmSirene").submit(function(e){
+//            $("#btnRecherche").click(function(){
+                e.preventDefault();
+                $(".loading").show();
+                var destURL = "/sirene/result/"+$("#sirene_critere").val();
+alert(destURL);
+                $.ajax({
+                    type: "POST",
+                    url: destURL,
+                    cache: false,
+                    success: function(data){
+alert(data);
+                        $('#divBaseSirene').html(data);
+                        $(".loading").hide();
+                    }
+                });    
+                return false;
+            });
+        })
+    </script>
 {% endblock %}
