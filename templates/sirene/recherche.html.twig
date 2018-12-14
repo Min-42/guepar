@@ -46,14 +46,21 @@
             $("#frmSirene").submit(function(e){
                 $(".img-loading").show();
                 e.preventDefault();
-                var destURL = "/sirene/result/"+$("#sirene_critere").val();
-                $('#divBaseSirene').load(destURL, function(response, status, xhr){
-                    if ( status == "error" ) {
-                        var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
-                        $('#divBaseSirene').html(msgError);
-                      }
-                      $(".img-loading").hide();
-                    });
+                var sireneCritere = $("#sirene_critere").val().replace(/ /g,"");
+                if (!isNaN(sireneCritere) && sireneCritere.length > 8){
+                    sireneCritere = sireneCritere.substr(0,9);
+                    var destURL = "/sirene/result/"+sireneCritere;
+                    $('#divBaseSirene').load(destURL, function(response, status, xhr){
+                        if ( status == "error" ) {
+                            var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
+                            $('#divBaseSirene').html(msgError);
+                        }
+                        $(".img-loading").hide();
+                        });
+                } else {
+                    $('#divBaseSirene').html("Critère autre que code siren");
+                    $(".img-loading").hide();
+                }
                 return true;
             });
         })
