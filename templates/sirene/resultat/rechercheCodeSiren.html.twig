@@ -14,6 +14,19 @@
     </div>
 </div>
 
+{# $adresseSiege #}
+<div id="divStatut" class="row">
+    <label class="col-2">Adresse du siège :</label>
+    <div class="col">
+        {{ sirene.adresseSiege.complementAdresse }}
+        <br/>{{ sirene.adresseSiege.numeroVoie }}{{ sirene.adresseSiege.indiceRepetition }} {{ sirene.adresseSiege.typeVoie }} {{ sirene.adresseSiege.libelleVoie }}
+        <br/>{{ sirene.adresseSiege.codePostal }} {{ sirene.adresseSiege.libelleCommune }} {{ sirene.adresseSiege.codeCedex }} {{ sirene.adresseSiege.libelleCedex }}
+        {% if sirene.adresseSiege.codePaysEtranger != null %}
+            <br/>{{ sirene.adresseSiege.libellePaysEtranger }}
+        {% endif %}
+    </div>
+</div>
+
 {# $statut #}
 <div id="divStatut" class="row">
     <label class="col-2">Etat administratif :</label>
@@ -21,7 +34,7 @@
         {{ sirene.uniteLegale.statut }}
     </div>
 </div>
-
+    
 {# $categorieJuridique #}
 <div id="divCategorieJuridique" class="row">
     <label class="col-2">Catégorie juridique :</label>
@@ -123,6 +136,22 @@
         {{ sirene.uniteLegale.categorieEntreprise }} (en {{ sirene.uniteLegale.anneeCategorieEntreprise }})
     </div>
 </div>    
+
+{# $nbEtablissementsActifs #}
+<div id="divCategorieEntreprise" class="row">
+    <label class="col-2">Nb établissements actifs :</label>
+    <div class="col">
+        {{ sirene.nbEtablissementsActifs }}
+    </div>
+</div>    
+
+{# $nbEtablissementsFermés #}
+<div id="divCategorieEntreprise" class="row">
+    <label class="col-2">Nb établissements fermés :</label>
+    <div class="col">
+        {{ sirene.nbEtablissementsFermés }}
+    </div>
+</div>
 
 {# $Etablissements #}
 <div id="divEtablissements" class="row">

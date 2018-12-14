@@ -71,11 +71,23 @@ class SireneController extends AbstractController
         }
 
         $result = $this->executeRechercheUniteLegale($codeSiren);
-        //      Récupérer la liste trouvées
-    }
+        // Si pas d'erreur curl
+        //      récupérer en-tête sirene
+        // Si erreur curl ou accès base Sirene
+        //      Render message d'erreur
+
+        $tabResult = json_decode($result['valeur'], true);
+        $retour = $this->extraiteListe($tabResult['etablissements']);
+
+        return $this->render('sirene/resultat/rechercheLibelle.html.twig', [
+            'retour' => $retour,
+            'codeSiren' => $session->get('critereSirene'),
+            'json' => $result['valeur'],
+        ]);
+}
 
     private function executeRechercheUniteLegale($codeSiren) {
-        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siren/'.$codeSiren);
+        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren);
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
@@ -124,13 +136,17 @@ class SireneController extends AbstractController
         $sirene = new Sirene();
 
         foreach ($valeurSirene as $SireneEtablissement) {
-            $actif=false;
             $first=true;
+            $actif = false;
             foreach ($SireneEtablissement['periodesEtablissement'] as $key => $periodeEtablissement) {
-                if ($periodeEtablissement['etatAdministratifEtablissement'] == "A") {
-                    $actif = true;
+                if ($periodeEtablissement['dateFin'] == null) {
+                    if ($periodeEtablissement['etatAdministratifEtablissement'] == "A") {
+                        $sirene->incrementNbEtablissementsActifs();
+                        $actif = true;
+                    } else {
+                        $sirene->incrementNbEtablissementsFermés();
+                    }
                     $indicePeriode = $key;
-                    break;
                 }
             }
             if ($actif) {
@@ -140,10 +156,23 @@ class SireneController extends AbstractController
                     $first = false;
                 }
                 $sireneEtablissement = new SireneEtablissement($SireneEtablissement, $SireneEtablissement['periodesEtablissement'][$indicePeriode]);
-                $sireneEtablissement->setAdresse(new SireneAdresse($SireneEtablissement['adresseEtablissement']));
+                $adresseEtablissement = new SireneAdresse($SireneEtablissement['adresseEtablissement']);
+                $sireneEtablissement->setAdresse($adresseEtablissement);
                 $sirene->addEtablissement($sireneEtablissement);
+                if ($sireneEtablissement->getEtablissementSiege()) {
+                    $sirene->setAdresseSiege($adresseEtablissement);
+                }
             }
         }
         return $sirene;
+    }
+
+    private function extraiteListe($tableau) {
+        return print_r($tableau[0]);
+        $sirenes = [];
+        foreach ($tableau as $key => $sousTableau) {
+            $sirenes[] = $this->extraiteInfoSirene($sousTableau);
+        }
+        return $sirenes;
     }
 }

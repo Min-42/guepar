@@ -20,6 +20,11 @@ class SireneEtablissement
     /**
      * 
      */
+    private $etatAdministratifEtablissement;
+
+    /**
+     * 
+     */
     private $adresse;
 
     /**
@@ -75,6 +80,7 @@ class SireneEtablissement
     public function __construct($etablissement, $periode)
     {
         $this->nic = $etablissement['nic'];
+        $this->etatAdministratifEtablissement = $periode['etatAdministratifEtablissement'];
         $this->trancheEffectifs = $etablissement['trancheEffectifsEtablissement'];
         $this->anneEffectifs = $etablissement['anneeEffectifsEtablissement'];
         $this->etablissementSiege = $etablissement['etablissementSiege'];
@@ -123,6 +129,26 @@ class SireneEtablissement
     public function setNic($nic)
     {
         $this->nic = $nic;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of etatAdministratifEtablissement
+     */ 
+    public function getEtatAdministratifEtablissement()
+    {
+        return $this->etatAdministratifEtablissement;
+    }
+
+    /**
+     * Set the value of etatAdministratifEtablissement
+     *
+     * @return  self
+     */ 
+    public function setEtatAdministratifEtablissement($etatAdministratifEtablissement)
+    {
+        $this->etatAdministratifEtablissement = $etatAdministratifEtablissement;
 
         return $this;
     }
