@@ -17,21 +17,19 @@ use App\Service\BaseSirene;
 class SireneController extends AbstractController
 {
     /**
-     * @Route("/sirene/{id}", name="sirene_detail")
+     * @Route("/sirene/{codeSiren}", name="sirene_detail")
      * @Route("/sirene", name="sirene_recherche")
      */
-    public function index(Sirene $sirene = null, Request $request, SessionInterface $session)
+    public function index($codeSiren = null, Request $request, SessionInterface $session)
     {
-        if (!$sirene) {
-            $sirene = new Sirene();
+        $sirene = new Sirene();
+        if ($codeSiren){
+            $sirene->setCodeSiren($codeSiren);
         }
+        $session->set('critereSirene', $codeSiren);
 
         $formRecherche = $this->createForm(SireneType::class, $sirene);
         $formRecherche->handleRequest($request);
-
-        if ($formRecherche->isSubmitted() && $formRecherche->isValid()) {
-            $session->set('critereSirene', $sirene->getCritere());
-        }
 
         return $this->render('sirene/recherche.html.twig', [
             'formRecherche' => $formRecherche->createView(),
@@ -40,23 +38,22 @@ class SireneController extends AbstractController
     }
 
     /**
-     * @Route("/sirene/result/{critere}", name="sirene_result")
+     * @Route("/sirene/result/{codeSiren}", name="sirene_result")
      */
-    public function resultatRecherche($critere = null, SessionInterface $session) {
-dump($session->get('critereSirene'));
+    public function resultatRecherche($codeSiren = null, SessionInterface $session) {
         // Aucun critère de recherche renseigné
-        if (!$critere and !$session->get('critereSirene')) {
+        if (!$codeSiren) {
             return $this->render('sirene/resultat/rechercheVide.html.twig');
         }
+        $session->set('critereSirene', $codeSiren);
 
-        $typeRecherche = $this->quelCritere($critere);
-
+        $typeRecherche = $this->quelCritere($codeSiren);
         if ($typeRecherche == "aucun") {
             return $this->render('sirene/resultat/rechercheVide.html.twig');
         }
 
         if ($typeRecherche == "Code siren") {
-            $result = $this->executeRechercheEtablissements($critere);
+            $result = $this->executeRechercheEtablissements($codeSiren);
             
             // Si pas d'erreur curl
             //      récupérer en-tête sirene
@@ -68,16 +65,17 @@ dump($session->get('critereSirene'));
 
             return $this->render('sirene/resultat/rechercheCodeSiren.html.twig', [
                 'sirene' => $sirene,
+                'codeSiren' => $session->get('critereSirene'),
                 'json' => $result['valeur'],
             ]);
         }
 
-        $result = $this->executeRechercheUniteLegale($critere);
+        $result = $this->executeRechercheUniteLegale($codeSiren);
         //      Récupérer la liste trouvées
     }
 
-    private function executeRechercheUniteLegale($critere) {
-        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siren/'.$critere);
+    private function executeRechercheUniteLegale($codeSiren) {
+        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siren/'.$codeSiren);
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
@@ -94,8 +92,8 @@ dump($session->get('critereSirene'));
         return $result;
     }
 
-    private function executeRechercheEtablissements($critere) {
-        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$critere);
+    private function executeRechercheEtablissements($codeSiren) {
+        $curl = curl_init('https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren);
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
@@ -112,11 +110,11 @@ dump($session->get('critereSirene'));
         return $result;
     }
 
-    private function quelCritere($critere) {
-        if ($critere == "" || $critere == null) {
+    private function quelCritere($codeSiren) {
+        if ($codeSiren == "" || $codeSiren == null) {
             return "aucun";
         }
-        if (is_numeric($critere) && strlen($critere) == 9) {
+        if (is_numeric($codeSiren) && strlen($codeSiren) == 9) {
             return "Code siren";
         }
         return "libellé";

@@ -14,19 +14,21 @@
                 {{ form_widget(formRecherche.critere) }}
             </div>
             <div class="col">
-                <input type="image" src="/images/ico-suppress.png" id="btnRecherche">
+                <input type="image" src="/images/ico-recherche.png" id="btnRecherche" class="ico-recherche">
             </div>
         </div>
+        <div id="divLoading" class="row">
+            <div class="col img-loading"></div>
+        </div>
         {{ form_end(formRecherche) }}
-        <div class="loading"></div>
 
         {% include 'sirene/navigation.html.twig' %}
         {# resultats #}
         <div id="divResultats" class="row">
             <label class="col-2">Base gouvernementale :</label>
             <div id="divBaseSirene" class="col">
-                    {{ render(controller('App\\Controller\\SireneController::resultatRecherche')) }}
 {# exemples de test
+                {{ render(controller('App\\Controller\\SireneController::resultatRecherche')) }}
                 {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'critere':'791604697'})) }}
                 {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'critere':'781092036'})) }}
 #}
@@ -39,25 +41,20 @@
 
 {% block javascripts %}
     <script>
-        $(".loading").hide();
+        $(".img-loading").hide();
         $(function() {
             $("#frmSirene").submit(function(e){
-//            $("#btnRecherche").click(function(){
+                $(".img-loading").show();
                 e.preventDefault();
-                $(".loading").show();
                 var destURL = "/sirene/result/"+$("#sirene_critere").val();
-alert(destURL);
-                $.ajax({
-                    type: "POST",
-                    url: destURL,
-                    cache: false,
-                    success: function(data){
-alert(data);
-                        $('#divBaseSirene').html(data);
-                        $(".loading").hide();
-                    }
-                });    
-                return false;
+                $('#divBaseSirene').load(destURL, function(response, status, xhr){
+                    if ( status == "error" ) {
+                        var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
+                        $('#divBaseSirene').html(msgError);
+                      }
+                      $(".img-loading").hide();
+                    });
+                return true;
             });
         })
     </script>

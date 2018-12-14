@@ -11,8 +11,25 @@
 	margin-right: 6px;
 	}
 
+.ico-recherche {
+	height: 30px;
+	width: auto;
+	margin-right: 6px;
+	}
+			
 .ico-ajoute-element{
 	height: 15px;
 	width: auto;
 	margin-right: 6px;
+	}
+
+.img-loading{
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	left: 50%;
+	z-index: 999999;
+	background-image:url(/images/loading.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
 	}
