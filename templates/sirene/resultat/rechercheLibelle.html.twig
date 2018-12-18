@@ -1,6 +1,42 @@
 Retour de l'analyse : {{ sirenes|length }}
 {% for sirene in sirenes %}
-    <br/>Code Siren : {{ sirene.codeSiren }}
+    {% if loop.first %}
+        <table border='1'>
+        <tr>
+            <th>Code siren</th>
+            <th>Dénomination</th>
+            <th>Activité principale</th>
+            <th>Adresse du siège</th>
+            <th>Nb étab.</th>
+        </tr>
+    {% endif %}
+    <tr>
+        <td>
+            {{ sirene.codeSiren }}
+        </td>
+        <td>
+            {{ sirene.uniteLegale.denomination }}
+        </td>
+        <td>
+            {{sirene.uniteLegale.activitePrincipale }}
+        </td>
+        <td>
+{% if sirene.adresseSiege != null %}
+            {{ sirene.adresseSiege.complementAdresse }}
+            <br/>{{ sirene.adresseSiege.numeroVoie }}{{ sirene.adresseSiege.indiceRepetition }} {{ sirene.adresseSiege.typeVoie }} {{ sirene.adresseSiege.libelleVoie }}
+            <br/>{{ sirene.adresseSiege.codePostal }} {{ sirene.adresseSiege.libelleCommune }} {{ sirene.adresseSiege.codeCedex }} {{ sirene.adresseSiege.libelleCedex }}
+            {% if sirene.adresseSiege.codePaysEtranger != null %}
+                <br/>{{ sirene.adresseSiege.libellePaysEtranger }}
+            {% endif %}
+{% endif %}
+            </td>
+        <td>
+            {{ sirene.nbEtablissementsActifs }}
+        </td>
+    </tr>
+    {% if loop.last %}
+        </table>
+    {% endif %}
 {% endfor %}
  
 
