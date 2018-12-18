@@ -38,8 +38,8 @@
 
         {# Résultat en cas de recherche sur libellé #}
         {# Fenêtre modale #}
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">test</button>
-        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalListeSirene">test</button>
+        <div class="modal fade" id="modalListeSirene" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,7 +48,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div id="modalBodyListeSirene" class="modal-body">
                     {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'codeSiren':'Polymont'})) }}
                 </div>
                 <div class="modal-footer">
@@ -70,9 +70,9 @@
                 $(".img-loading").show();
                 e.preventDefault();
                 var sireneCritere = $("#sirene_critere").val().replace(/ /g,"");
+                sireneCritere = sireneCritere.substr(0,9);
+                var destURL = "/sirene/result/"+sireneCritere;
                 if (!isNaN(sireneCritere) && sireneCritere.length > 8){
-                    sireneCritere = sireneCritere.substr(0,9);
-                    var destURL = "/sirene/result/"+sireneCritere;
                     $('#divBaseSirene').load(destURL, function(response, status, xhr){
                         if ( status == "error" ) {
                             var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
@@ -81,8 +81,16 @@
                         $(".img-loading").hide();
                         });
                 } else {
-                    $('#divBaseSirene').html("Critère autre que code siren");
+                    $('#modalBodyListeSirene').load(destURL, function(response, status, xhr){
+                    if ( status == "error" ) {
+                        var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
+                        $('#divBaseSirene').html(msgError);
+                    }
+                    else {
+                        $('#modalListeSirene').modal('show');
+                    }
                     $(".img-loading").hide();
+                    });
                 }
                 return true;
             });
