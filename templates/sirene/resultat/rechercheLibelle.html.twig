@@ -1,4 +1,3 @@
-Retour de l'analyse : {{ sirenes|length }}
 {% for sirene in sirenes %}
     {% if loop.first %}
         <table border='1'>
@@ -7,7 +6,8 @@ Retour de l'analyse : {{ sirenes|length }}
             <th>Dénomination</th>
             <th>Activité principale</th>
             <th>Adresse du siège</th>
-            <th>Nb étab.</th>
+            <th>Etab.<br/>actifs</th>
+            <th>Etab.<br/>fermés</th>
         </tr>
     {% endif %}
     <tr>
@@ -21,17 +21,18 @@ Retour de l'analyse : {{ sirenes|length }}
             {{sirene.uniteLegale.activitePrincipale }}
         </td>
         <td>
-{% if sirene.adresseSiege != null %}
             {{ sirene.adresseSiege.complementAdresse }}
             <br/>{{ sirene.adresseSiege.numeroVoie }}{{ sirene.adresseSiege.indiceRepetition }} {{ sirene.adresseSiege.typeVoie }} {{ sirene.adresseSiege.libelleVoie }}
             <br/>{{ sirene.adresseSiege.codePostal }} {{ sirene.adresseSiege.libelleCommune }} {{ sirene.adresseSiege.codeCedex }} {{ sirene.adresseSiege.libelleCedex }}
             {% if sirene.adresseSiege.codePaysEtranger != null %}
                 <br/>{{ sirene.adresseSiege.libellePaysEtranger }}
             {% endif %}
-{% endif %}
-            </td>
+        </td>
         <td>
             {{ sirene.nbEtablissementsActifs }}
+        </td>
+        <td>
+            {{ sirene.nbEtablissementsFermés }}
         </td>
     </tr>
     {% if loop.last %}
@@ -39,7 +40,7 @@ Retour de l'analyse : {{ sirenes|length }}
     {% endif %}
 {% endfor %}
  
-
+{#
 <div id="divJson" class="row">
     <label class="col-2">json :</label>
     <div class="col">
@@ -53,3 +54,4 @@ Retour de l'analyse : {{ sirenes|length }}
         {{ codeSiren }}
     </div>
 </div>
+#}

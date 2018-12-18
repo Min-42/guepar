@@ -52,10 +52,10 @@ class SireneController extends AbstractController
             return $this->render('sirene/resultat/rechercheVide.html.twig');
         }
         if ($typeRecherche == "Code siren") {
-            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren;
+            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=50';
         }
         if ($typeRecherche == "Libellé") {
-            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren;
+            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=50';
         }
         $result = $this->executeRecherche($urlINSEE);
         // Si pas d'erreur curl
@@ -119,8 +119,6 @@ class SireneController extends AbstractController
             if (!isset($tabSirene[$codeS])) {
                 $tabSirene[$codeS] = [];
             }
-//            $tabSirene[$codeS]['nic'] = $sireneEtablissement['nic'];
-            $tabSirene[$codeS]['siege'] = $sireneEtablissement['etablissementSiege'];
             $tabSirene[$codeS]['uniteLegale'] = new SireneUniteLegale($sireneEtablissement['uniteLegale']);
             $tabSirene[$codeS]['adresse'] = new SireneAdresse($sireneEtablissement['adresseEtablissement']);
             $indicePeriode = -1;
@@ -139,6 +137,7 @@ class SireneController extends AbstractController
             }
             $etab = new SireneEtablissement($sireneEtablissement, $sireneEtablissement['periodesEtablissement'][$indicePeriode]);
             $etab->setAdresse($tabSirene[$codeS]['adresse']);
+            $etab->setEtablissementSiege($sireneEtablissement['etablissementSiege']);
             $tabSirene[$codeS]['etablissements'][] = $etab;
         }
         
@@ -147,8 +146,8 @@ class SireneController extends AbstractController
             $sirene = new Sirene();
             $sirene->setCodeSiren($keySiren);
             $sirene->setUnitelegale($elemSirene['uniteLegale']);
-            if ($elemSirene['siege']) $sirene->setAdresseSiege($elemSirene['adresse']);
             foreach ($elemSirene['etablissements'] as $keyEtab => $etab) {
+                if ($etab->getEtablissementSiege()) $sirene->setAdresseSiege($elemSirene['adresse']);
                 if ($etab->getEtatAdministratifEtablissement()=="A"){
                     $sirene->addEtablissement($etab);
                 }
