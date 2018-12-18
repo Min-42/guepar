@@ -61,10 +61,10 @@ class SireneController extends AbstractController
             //      Render message d'erreur
 
             $tabResult = json_decode($result['valeur'], true);
-            $sirene = $this->extraiteInfoSirene($tabResult['etablissements']);
+            $sirenes = $this->extraiteInfoSirene($tabResult['etablissements']);
 
             return $this->render('sirene/resultat/rechercheCodeSiren.html.twig', [
-                'sirene' => $sirene,
+                'sirene' => $sirene[0],
                 'codeSiren' => $session->get('critereSirene'),
                 'json' => $result['valeur'],
             ]);
@@ -77,10 +77,11 @@ class SireneController extends AbstractController
         //      Render message d'erreur
 
         $tabResult = json_decode($result['valeur'], true);
-        $retour = $this->extraiteListe($tabResult['etablissements']);
+$sirenes = $this->extraiteInfoSirene($tabResult['etablissements']);
+//        $retour = $this->extraiteListe($tabResult['etablissements']);
 
         return $this->render('sirene/resultat/rechercheLibelle.html.twig', [
-            'retour' => $retour,
+            'sirenes' => $sirenes,
             'codeSiren' => $session->get('critereSirene'),
             'json' => $result['valeur'],
         ]);
@@ -91,7 +92,7 @@ class SireneController extends AbstractController
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
-            'Authorization: Bearer '.'321ca85d-eab7-313c-b10b-84f0305d28b6',
+            'Authorization: Bearer '.'499c4ef8-de32-3d87-8c9f-874a95061859',
         ]);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -109,7 +110,7 @@ class SireneController extends AbstractController
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
-            'Authorization: Bearer '.'321ca85d-eab7-313c-b10b-84f0305d28b6',
+            'Authorization: Bearer '.'499c4ef8-de32-3d87-8c9f-874a95061859',
         ]);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -133,9 +134,11 @@ class SireneController extends AbstractController
     }
 
     private function extraiteInfoSirene($valeurSirene) {
-        $sirene = new Sirene();
+        $sirenes = [];
 
         foreach ($valeurSirene as $SireneEtablissement) {
+dump($SireneEtablissement);
+            $sirene = new Sirene();
             $first=true;
             $actif = false;
             foreach ($SireneEtablissement['periodesEtablissement'] as $key => $periodeEtablissement) {
@@ -162,15 +165,20 @@ class SireneController extends AbstractController
                 if ($sireneEtablissement->getEtablissementSiege()) {
                     $sirene->setAdresseSiege($adresseEtablissement);
                 }
+                $sirenes[] = $sirene;
             }
         }
-        return $sirene;
+dump($sirenes);
+        return $sirenes;
     }
 
     private function extraiteListe($tableau) {
-        return print_r($tableau[0]);
         $sirenes = [];
+dump($tableau[0]);
+$sirenes[] = $this->extraiteInfoSirene($tableau[0]);
+return $sirenes;
         foreach ($tableau as $key => $sousTableau) {
+dump($sousTableau);
             $sirenes[] = $this->extraiteInfoSirene($sousTableau);
         }
         return $sirenes;

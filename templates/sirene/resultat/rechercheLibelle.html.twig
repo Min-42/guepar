@@ -1,4 +1,8 @@
-Retour de l'analyse : {{ retour }}
+Retour de l'analyse : {{ sirenes|length }}
+{% for sirene in sirenes %}
+    <br/>Code Siren : {{ sirene.codeSiren }}
+{% endfor %}
+ 
 
 <div id="divJson" class="row">
     <label class="col-2">json :</label>
