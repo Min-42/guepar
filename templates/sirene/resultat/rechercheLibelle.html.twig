@@ -13,7 +13,7 @@
     {% endif %}
     <tr>
         <td>
-            <button  type="button" class="btn btn-primary btnChoix" data-dismiss="modal" data-siren="{{ sirene.codeSiren }}">Sélectionner</button>
+            <button  type="button" class="btn btn-primary btnChoix" data-siren="{{ sirene.codeSiren }}">Sélectionner</button>
         </td>
         <td>
             {{ sirene.codeSiren }}
@@ -62,8 +62,10 @@
 
 <script>
     $(function() {
-        $(".btnChoix").click(function(e){
-            alert($this.data('siren'));
+        $(".btnChoix").click(function(){
+            var selectionCodeSiren = $(this).data('siren');
+//            alert(selectionCodeSiren);
+            $('#modalListeSirene').modal('hide');
         });
     })
 </script>
