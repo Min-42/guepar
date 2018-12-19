@@ -43,42 +43,67 @@ class SireneController extends AbstractController
     public function resultatRecherche($codeSiren = null, SessionInterface $session) {
         // Aucun critère de recherche renseigné
         if (!$codeSiren) {
-            return $this->render('sirene/resultat/rechercheVide.html.twig');
+            return $this->render('sirene/resultat/rechercheErreur.html.twig', [
+                'erreur' => -1,
+                'message' => 'Veuillez saisir un critère et effectuer une recherche',
+            ]);
         }
         $session->set('critereSirene', $codeSiren);
 
+        // Selon le type de rescherche, constitution de l'URL
         $typeRecherche = $this->quelCritere($codeSiren);
-        if ($typeRecherche == "aucun") {
-            return $this->render('sirene/resultat/rechercheVide.html.twig');
-        }
-        if ($typeRecherche == "Code siren") {
-            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=50';
-        }
-        if ($typeRecherche == "Libellé") {
-            $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=50';
-        }
+        if ($typeRecherche == "aucun") return $this->render('sirene/resultat/rechercheVide.html.twig');
+        if ($typeRecherche == "Code siren") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=50';
+        if ($typeRecherche == "Libellé") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=50';
+
+        // Appel de l'API INSEE
         $result = $this->executeRecherche($urlINSEE);
-        // Si pas d'erreur curl
-        //      récupérer en-tête sirene
-        // Si erreur curl ou accès base Sirene
-        //      Render message d'erreur
+        // Site INSEE en maintenance
+        if (strstr($result['valeur'], "<title>Maintenance - INSEE</title>")) {
+            $result['numErreur'] = 199;
+            $result['msgErreur'] = "A la suite d'une maintenance du site de l'INSEE, les informations sont momentanément indisponibles.";
+        }
+        if ($result['numErreur'] != 0) {
+            return $this->render('sirene/resultat/rechercheErreur.html.twig', [
+                'erreur' => $result['numErreur'],
+                'message' => $result['msgErreur'],
+            ]);
+        }
 
+        // Analyse de l'en-tête INSEE
+        $result = $this->extraireEnTeteSirene(json_decode($result['valeur'], true)['header'], $result);
+        if ($result['numErreur'] != 200) {
+            // Si erreur curl ou accès base Sirene ==> Render message d'erreur
+            return $this->render('sirene/resultat/rechercheErreur.html.twig', [
+                'erreur' => $result['numErreur'],
+                'message' => $result['msgErreur'],
+            ]);
+        }
+
+        // Récupération des infos sirène sous forme de tableau d'objets Sirene
         $tabResult = json_decode($result['valeur'], true);
-        $sirenes = $this->extraiteInfoSirene($tabResult['etablissements']);
+        $sirenes = $this->extraireInfoSirene($tabResult['etablissements']);
 
+        // Restitution
         if ($typeRecherche == "Code siren") {
             return $this->render('sirene/resultat/rechercheCodeSiren.html.twig', [
                 'sirene' => $sirenes[0],
-                'codeSiren' => $session->get('critereSirene'),
-                'json' => $result['valeur'],
             ]);
         }
 
         return $this->render('sirene/resultat/rechercheLibelle.html.twig', [
             'sirenes' => $sirenes,
-            'codeSiren' => $session->get('critereSirene'),
-            'json' => $result['valeur'],
         ]);
+    }
+
+    private function quelCritere($codeSiren) {
+        if ($codeSiren == "" || $codeSiren == null) {
+            return "aucun";
+        }
+        if (is_numeric($codeSiren) && strlen($codeSiren) == 9) {
+            return "Code siren";
+        }
+        return "Libellé";
     }
 
     private function executeRecherche($urlINSEE) {
@@ -92,25 +117,17 @@ class SireneController extends AbstractController
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         
         $result = [];
-        $result['valeur'] = curl_exec($curl);
-        $result['numErreur'] = curl_error($curl);
-        $result['msgErreur'] = curl_errno($curl);
+        $result['numErreur'] = 0;
+        if (!$result['valeur'] = curl_exec($curl)) {
+            $result['msgErreur'] = curl_error($curl);
+            $result['numErreur'] = curl_errno($curl);
+        }
         curl_close($curl);
 
         return $result;
     }
 
-    private function quelCritere($codeSiren) {
-        if ($codeSiren == "" || $codeSiren == null) {
-            return "aucun";
-        }
-        if (is_numeric($codeSiren) && strlen($codeSiren) == 9) {
-            return "Code siren";
-        }
-        return "Libellé";
-    }
-
-    private function extraiteInfoSirene($valeurSirene) {
+    private function extraireInfoSirene($valeurSirene) {
         // Les établissements arrivent de l'INSEE dans un ordre aléatoire
         // ==> Construction des sirenes en tableau
         $tabSirene=[];
@@ -157,38 +174,11 @@ class SireneController extends AbstractController
             $sirenes[] = $sirene;
         }
         return $sirenes;
-//        $sirenes = [];
-//        foreach ($valeurSirene as $SireneEtablissement) {
-//            $sirene = new Sirene();
-//            $first=true;
-//            $actif = false;
-//            foreach ($SireneEtablissement['periodesEtablissement'] as $key => $periodeEtablissement) {
-//                if ($periodeEtablissement['dateFin'] == null) {
-//                    if ($periodeEtablissement['etatAdministratifEtablissement'] == "A") {
-//                        $sirene->incrementNbEtablissementsActifs();
-//                        $actif = true;
-//                    } else {
-//                        $sirene->incrementNbEtablissementsFermés();
-//                    }
-//                    $indicePeriode = $key;
-//                }
-//            }
-//            if ($actif) {
-//                if ($first){
-//                    $sirene->setCodeSiren($SireneEtablissement['siren']);
-//                    $sirene->setUniteLegale(new SireneUniteLegale($SireneEtablissement['uniteLegale']));
-//                    $first = false;
-//                }
-//                $sireneEtablissement = new SireneEtablissement($SireneEtablissement, $SireneEtablissement['periodesEtablissement'][$indicePeriode]);
-//                $adresseEtablissement = new SireneAdresse($SireneEtablissement['adresseEtablissement']);
-//                $sireneEtablissement->setAdresse($adresseEtablissement);
-//                $sirene->addEtablissement($sireneEtablissement);
-//                if ($sireneEtablissement->getEtablissementSiege()) {
-//                    $sirene->setAdresseSiege($adresseEtablissement);
-//                }
-//                $sirenes[] = $sirene;
-//            }
-//        }
-        return $sirenes;
+    }
+
+    function extraireEnTeteSirene($header, $result) {
+        $result['numErreur'] = $header['statut'];
+        $result['msgErreur'] = $header['message'];
+        return $result;
     }
 }
