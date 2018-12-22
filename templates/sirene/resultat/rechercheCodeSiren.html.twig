@@ -18,12 +18,7 @@
 <div id="divStatut" class="row">
     <label class="col-2">Adresse du siège :</label>
     <div class="col">
-        {{ sirene.adresseSiege.complementAdresse }}
-        <br/>{{ sirene.adresseSiege.numeroVoie }}{{ sirene.adresseSiege.indiceRepetition }} {{ sirene.adresseSiege.typeVoie }} {{ sirene.adresseSiege.libelleVoie }}
-        <br/>{{ sirene.adresseSiege.codePostal }} {{ sirene.adresseSiege.libelleCommune }} {{ sirene.adresseSiege.codeCedex }} {{ sirene.adresseSiege.libelleCedex }}
-        {% if sirene.adresseSiege.codePaysEtranger != null %}
-            <br/>{{ sirene.adresseSiege.libellePaysEtranger }}
-        {% endif %}
+        {{ sirene.adresseSiege | adresse | raw }}
     </div>
 </div>
 
@@ -186,12 +181,7 @@
                 </td>
                 <td>
                     {# adresse #}
-                    {{ etablissement.adresse.complementAdresse }}
-                    <br/>{{ etablissement.adresse.numeroVoie }}{{ etablissement.adresse.indiceRepetition }} {{ etablissement.adresse.typeVoie }} {{ etablissement.adresse.libelleVoie }}
-                    <br/>{{ etablissement.adresse.codePostal }} {{ etablissement.adresse.libelleCommune }} {{ etablissement.adresse.codeCedex }} {{ etablissement.adresse.libelleCedex }}
-                    {% if etablissement.adresse.codePaysEtranger != null %}
-                        <br/>{{ etablissement.adresse.libellePaysEtranger }}
-                    {% endif %}
+                    {{ etablissement.adresse |adresse | raw }}
                 </td>
                 <td>
                     {# trancheEffectifs #}

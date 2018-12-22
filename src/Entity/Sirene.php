@@ -35,6 +35,11 @@ class Sirene
     private $adresseSiege;
 
     /**
+     * true si entreprise individuelle, false sinon
+     */
+    private $individuelle;
+
+    /**
      * 
      */
     private $etablissements;
@@ -118,9 +123,29 @@ class Sirene
      *
      * @return  self
      */ 
-    public function setAdresseSiege(SireneAdresse $adresseSiege)
+    public function setAdresseSiege($adresseSiege)
     {
         $this->adresseSiege = $adresseSiege;
+
+        return $this;
+    }
+
+    /**
+     * Get true si entreprise individuelle, false sinon
+     */ 
+    public function getIndividuelle()
+    {
+        return $this->individuelle;
+    }
+
+    /**
+     * Set true si entreprise individuelle, false sinon
+     *
+     * @return  self
+     */ 
+    public function setIndividuelle($individuelle)
+    {
+        $this->individuelle = $individuelle;
 
         return $this;
     }
@@ -155,10 +180,10 @@ class Sirene
     public function setNbEtablissementsActifs($nbEtablissementsActifs)
     {
         $this->nbEtablissementsActifs = $nbEtablissementsActifs;
-
+        
         return $this;
     }
-
+    
     /**
      * Increment the value of nbEtablissementsActifs
      *
@@ -167,10 +192,10 @@ class Sirene
     public function incrementNbEtablissementsActifs()
     {
         $this->nbEtablissementsActifs += 1;
-
+        
         return $this;
     }
-
+    
     /**
      * Get the value of nbEtablissementsFermés
      */ 
@@ -178,7 +203,7 @@ class Sirene
     {
         return $this->nbEtablissementsFermés;
     }
-
+    
     /**
      * Set the value of nbEtablissementsFermés
      *
@@ -187,10 +212,10 @@ class Sirene
     public function setNbEtablissementsFermés($nbEtablissementsFermés)
     {
         $this->nbEtablissementsFermés = $nbEtablissementsFermés;
-
+        
         return $this;
     }
-
+    
     /**
      * Increment the value of nbEtablissementsFermés
      *
@@ -199,7 +224,7 @@ class Sirene
     public function incrementNbEtablissementsFermés()
     {
         $this->nbEtablissementsFermés += 1;
-
+        
         return $this;
     }
 }

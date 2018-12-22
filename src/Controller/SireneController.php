@@ -53,8 +53,8 @@ class SireneController extends AbstractController
         // Selon le type de rescherche, constitution de l'URL
         $typeRecherche = $this->quelCritere($codeSiren);
         if ($typeRecherche == "aucun") return $this->render('sirene/resultat/rechercheVide.html.twig');
-        if ($typeRecherche == "Code siren") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=50';
-        if ($typeRecherche == "Libellé") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=50';
+        if ($typeRecherche == "Code siren") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=500';
+        if ($typeRecherche == "Libellé") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=500';
 
         // Appel de l'API INSEE
         $result = $this->executeRecherche($urlINSEE);
@@ -111,7 +111,7 @@ class SireneController extends AbstractController
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,[
             'Accept:application/json',
-            'Authorization: Bearer '.'499c4ef8-de32-3d87-8c9f-874a95061859',
+            'Authorization: Bearer '.'d66a4595-c8c7-3337-93d3-5b8563a5ada0',
         ]);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -137,7 +137,8 @@ class SireneController extends AbstractController
                 $tabSirene[$codeS] = [];
             }
             $tabSirene[$codeS]['uniteLegale'] = new SireneUniteLegale($sireneEtablissement['uniteLegale']);
-            $tabSirene[$codeS]['adresse'] = new SireneAdresse($sireneEtablissement['adresseEtablissement']);
+            if ($sireneEtablissement['uniteLegale']['sexeUniteLegale'] == null) $tabSirene[$codeS]['individuelle'] = true;
+            else $tabSirene[$codeS]['individuelle'] = false;
             $indicePeriode = -1;
             $dateMax = "1900-01-01";
             foreach ($sireneEtablissement['periodesEtablissement'] as $keyPeriode => $periodeEtablissement) {
@@ -153,23 +154,25 @@ class SireneController extends AbstractController
                 $tabSirene[$codeS]['etablissements'] = [];
             }
             $etab = new SireneEtablissement($sireneEtablissement, $sireneEtablissement['periodesEtablissement'][$indicePeriode]);
-            $etab->setAdresse($tabSirene[$codeS]['adresse']);
+            $etab->setAdresse(new SireneAdresse($sireneEtablissement['adresseEtablissement']));
             $etab->setEtablissementSiege($sireneEtablissement['etablissementSiege']);
             $tabSirene[$codeS]['etablissements'][] = $etab;
         }
-        
+//dump($tabSirene);
+//die();
         $sirenes=[];
         foreach ($tabSirene as $keySiren => $elemSirene) {
             $sirene = new Sirene();
             $sirene->setCodeSiren($keySiren);
             $sirene->setUnitelegale($elemSirene['uniteLegale']);
+            $sirene->setIndividuelle($elemSirene['individuelle']);
             foreach ($elemSirene['etablissements'] as $keyEtab => $etab) {
-                if ($etab->getEtablissementSiege()) $sirene->setAdresseSiege($elemSirene['adresse']);
                 if ($etab->getEtatAdministratifEtablissement()=="A"){
                     $sirene->addEtablissement($etab);
                 }
                 if ($etab->getEtatAdministratifEtablissement() == "F") $sirene->incrementNbEtablissementsFermés();
                 else $sirene->incrementNbEtablissementsActifs();
+                if ($etab->getNic() == $etab->getNicSiege()) $sirene->setAdresseSiege($etab->getAdresse());
             }
             $sirenes[] = $sirene;
         }

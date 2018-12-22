@@ -15,6 +15,7 @@
             </div>
             <div class="col">
                 <input type="image" src="/images/ico-recherche.png" id="btnRecherche" class="ico-recherche">
+                <button type="button" class="btn btn-primary btn-sm" id="btnRevoir">revoir</button>
             </div>
         </div>
         <div id="divLoading" class="row">
@@ -28,11 +29,6 @@
         <div id="divResultats" class="row">
             <label class="col-2">Base gouvernementale :</label>
             <div id="divBaseSirene" class="col">
-{# exemples de test
-                {{ render(controller('App\\Controller\\SireneController::resultatRecherche')) }}
-                {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'codeSiren':'791604697'})) }}
-                {{ render(controller('App\\Controller\\SireneController::resultatRecherche', {'codeSiren':'781092036'})) }}
-#}
             </div>
         </div>    
 
@@ -41,15 +37,24 @@
         <div class="modal fade" id="modalListeSirene" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
+                {# Titre #}
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Entreprises répondant au critère</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <input id="selectionCodeSiren" type="text">
                 </div>
+                {# Filtres #}
+                <div class="filtres">
+                    Filtres : 
+                    <input type="checkbox" id="filtreStatut"><label for="filtreStatut">en activité</label>
+                    <input type="checkbox" id="filtreEtsActifs"><label for="filtreStatut">avec des établissements actifs</label>
+                    <input type="checkbox" id="filtreIndividuelle"><label for="filtreIndividuelle">Sans les entreprises individuelles</label>
+                </div>
+                {# Contenu #}
                 <div id="modalBodyListeSirene" class="modal-body">
                 </div>
+                {# Pied de fenêtre #}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
@@ -64,6 +69,10 @@
 {% block javascripts %}
     <script>
         $(".img-loading").hide();
+        $('#modalListeSirene').on('show.bs.modal', function (e) {
+            appliquerFlitres();
+        });
+
         $(function() {
             $("#frmSirene").submit(function(e){
                 $(".img-loading").show();
@@ -72,32 +81,58 @@
                 sireneCritere = sireneCritere.substr(0,9);
                 var destURL = "/sirene/result/"+sireneCritere;
                 if (!isNaN(sireneCritere) && sireneCritere.length > 8){
-                    $('#divBaseSirene').load(destURL, function(response, status, xhr){
-                        if ( status == "error" ) {
-                            var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
-                            $('#divBaseSirene').html(msgError);
-                        }
-                        $(".img-loading").hide();
-                        });
+                    refreshEntreprise(sireneCritere);
                 } else {
-                    $('#modalBodyListeSirene').load(destURL, function(response, status, xhr){
-                    if ( status == "error" ) {
-                        var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
-                        $('#divBaseSirene').html(msgError);
-                    }
-                    else {
-                        $('#modalListeSirene').modal('show');
-                    }
-                    $(".img-loading").hide();
-                    });
+                    refreshListe(sireneCritere);
                 }
                 return true;
             });
-            $('#modalBodyListeSirene').on('hide.bs.modal', function (e) {
-                alert("coucou");
-//                alert($('#selectionCodeSiren').val());
-                // do something...
-              })
+            $('#filtreStatut').click(function(e) {
+                appliquerFlitres();
+            })
+            $('#filtreEtsActifs').click(function(e) {
+                appliquerFlitres();
+            })
+            $('#filtreIndividuelle').click(function(e) {
+                appliquerFlitres();
+            })
+            $('#btnRevoir').click(function(e) {
+                $('#modalListeSirene').modal('show');
+            })
         })
+        function refreshEntreprise(codeSiren) {
+            $(".img-loading").show();
+            var destURL = "/sirene/result/"+codeSiren;
+            $('#divBaseSirene').load(destURL, function(response, status, xhr){
+                if ( status == "error" ) {
+                    var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
+                    $('#divBaseSirene').html(msgError);
+                }
+                $(".img-loading").hide();
+                });
+            }
+        function refreshListe(libelle) {
+            $(".img-loading").show();
+            var destURL = "/sirene/result/"+libelle;
+            $('#modalBodyListeSirene').load(destURL, function(response, status, xhr){
+            if ( status == "error" ) {
+                var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
+                $('#divBaseSirene').html(msgError);
+            }
+            else {
+                $('#modalListeSirene').modal('show');
+            }
+            $(".img-loading").hide();
+            });
+        }
+        function appliquerFlitres() {
+            $(".ligneEntreprise").each(function(){
+                var afficher = true;
+                if ($('#filtreStatut').is(':checked') && $(this).data('statut') != "A") afficher = false;
+                if ($('#filtreEtsActifs').is(':checked') && $(this).data('etsactifs') == 0) afficher = false;
+                if ($('#filtreIndividuelle').is(':checked') && $(this).data('individuelle') != 1) afficher = false;
+                if (afficher) $(this).show(); else $(this).hide()
+            })
+        }
     </script>
 {% endblock %}

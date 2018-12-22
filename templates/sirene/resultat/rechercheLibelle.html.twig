@@ -7,11 +7,16 @@
             <th>Dénomination</th>
             <th>Activité principale</th>
             <th>Adresse du siège</th>
+            <th>Statut</th>
+            <th>Individuelle</th>
             <th>Etab.<br/>actifs</th>
             <th>Etab.<br/>fermés</th>
         </tr>
     {% endif %}
-    <tr>
+    <tr class="ligneEntreprise" data-statut="{{ sirene.uniteLegale.statut }}" 
+                                data-individuelle="{{ sirene.individuelle }}"
+                                data-etsactifs="{{ sirene.nbEtablissementsActifs }}"
+                                >
         <td>
             <button  type="button" class="btn btn-primary btnChoix" data-siren="{{ sirene.codeSiren }}">Sélectionner</button>
         </td>
@@ -25,12 +30,13 @@
             {{sirene.uniteLegale.activitePrincipale }}
         </td>
         <td>
-            {{ sirene.adresseSiege.complementAdresse }}
-            <br/>{{ sirene.adresseSiege.numeroVoie }}{{ sirene.adresseSiege.indiceRepetition }} {{ sirene.adresseSiege.typeVoie }} {{ sirene.adresseSiege.libelleVoie }}
-            <br/>{{ sirene.adresseSiege.codePostal }} {{ sirene.adresseSiege.libelleCommune }} {{ sirene.adresseSiege.codeCedex }} {{ sirene.adresseSiege.libelleCedex }}
-            {% if sirene.adresseSiege.codePaysEtranger != null %}
-                <br/>{{ sirene.adresseSiege.libellePaysEtranger }}
-            {% endif %}
+            {{ sirene.adresseSiege | adresse | raw }}
+        </td>
+        <td>
+            {{ sirene.uniteLegale.statut | statutUniteLegale }}
+        </td>
+        <td>
+            {{ sirene.individuelle | individuelle}}
         </td>
         <td>
             {{ sirene.nbEtablissementsActifs }}
@@ -63,8 +69,8 @@
 <script>
     $(function() {
         $(".btnChoix").click(function(){
-            var selectionCodeSiren = $(this).data('siren');
-//            alert(selectionCodeSiren);
+            var codeSiren = $(this).data('siren');
+            refreshEntreprise(codeSiren)
             $('#modalListeSirene').modal('hide');
         });
     })
