@@ -53,8 +53,8 @@ class SireneController extends AbstractController
         // Selon le type de rescherche, constitution de l'URL
         $typeRecherche = $this->quelCritere($codeSiren);
         if ($typeRecherche == "aucun") return $this->render('sirene/resultat/rechercheVide.html.twig');
-        if ($typeRecherche == "Code siren") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.$codeSiren.'&nombre=500';
-        if ($typeRecherche == "Libellé") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.$codeSiren.'&nombre=500';
+        if ($typeRecherche == "Code siren") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=siren:'.rawurlencode($codeSiren).'&nombre=500';
+        if ($typeRecherche == "Libellé") $urlINSEE = 'https://api.insee.fr/entreprises/sirene/V3/siret?q=raisonSociale:'.rawurlencode($codeSiren).'&nombre=500';
 
         // Appel de l'API INSEE
         $result = $this->executeRecherche($urlINSEE);
@@ -69,7 +69,7 @@ class SireneController extends AbstractController
                 'message' => $result['msgErreur'],
             ]);
         }
-
+        
         // Analyse de l'en-tête INSEE
         $result = $this->extraireEnTeteSirene(json_decode($result['valeur'], true)['header'], $result);
         if ($result['numErreur'] != 200) {
@@ -79,7 +79,7 @@ class SireneController extends AbstractController
                 'message' => $result['msgErreur'],
             ]);
         }
-
+        
         // Récupération des infos sirène sous forme de tableau d'objets Sirene
         $tabResult = json_decode($result['valeur'], true);
         $sirenes = $this->extraireInfoSirene($tabResult['etablissements']);
@@ -123,7 +123,6 @@ class SireneController extends AbstractController
             $result['numErreur'] = curl_errno($curl);
         }
         curl_close($curl);
-
         return $result;
     }
 

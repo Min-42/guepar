@@ -83,7 +83,7 @@
                 if (!isNaN(sireneCritere) && sireneCritere.length > 8){
                     refreshEntreprise(sireneCritere);
                 } else {
-                    refreshListe(sireneCritere);
+                    refreshListe($("#sirene_critere").val());
                 }
                 return true;
             });
@@ -102,7 +102,7 @@
         })
         function refreshEntreprise(codeSiren) {
             $(".img-loading").show();
-            var destURL = "/sirene/result/"+codeSiren;
+            var destURL = encodeURI("/sirene/result/"+codeSiren);
             $('#divBaseSirene').load(destURL, function(response, status, xhr){
                 if ( status == "error" ) {
                     var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
@@ -113,7 +113,7 @@
             }
         function refreshListe(libelle) {
             $(".img-loading").show();
-            var destURL = "/sirene/result/"+libelle;
+            var destURL = encodeURI('/sirene/result/'+libelle);
             $('#modalBodyListeSirene').load(destURL, function(response, status, xhr){
             if ( status == "error" ) {
                 var msgError = "Désolé, une erreur s'est produite : " + xhr.status + " " + xhr.statusText;
